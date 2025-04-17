@@ -1,0 +1,144 @@
+package com.example.demo.userservice.entity;
+
+import jakarta.persistence.*;
+import lombok.NoArgsConstructor;
+
+import java.time.LocalDateTime;
+
+@Entity
+@Table(name="users")
+@NoArgsConstructor
+public class UserEntity {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    @Column(name = "user_first_name", nullable = false)
+    private String userFirstName;
+
+    @Column(name = "user_last_name", nullable = false)
+    private String userLastName;
+
+    @Column(nullable = false)
+    private String password;
+
+    @Column(unique = true, nullable = false)
+    private String email;
+
+    @Column(unique = true, nullable = false)
+    private String phone;
+
+    @Column
+    private Long birthday;
+
+    @Column(name = "created_at")
+    private LocalDateTime createdAt;
+
+    @Column
+    private String address;
+
+    @PrePersist
+    public void onCreate() {
+        this.createdAt = LocalDateTime.now();
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public String getUserFirstName() {
+        return userFirstName;
+    }
+
+    public void setUserFirstName(String userFirstName) {
+        this.userFirstName = userFirstName;
+    }
+
+    public String getUserLastName() {
+        return userLastName;
+    }
+
+    public void setUserLastName(String userLastName) {
+        this.userLastName = userLastName;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public String getPhone() {
+        return phone;
+    }
+
+    public void setPhone(String phone) {
+        this.phone = phone;
+    }
+
+    public Long getBirthday() {
+        return birthday;
+    }
+
+    public void setBirthday(Long birthday) {
+        this.birthday = birthday;
+    }
+
+    public String getAddress() {
+        return address;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
+    }
+
+    public LocalDateTime getCreatedAt() {
+        return createdAt;
+    }
+
+    public void setCreatedAt(LocalDateTime createdAt) {
+        this.createdAt = createdAt;
+    }
+
+    public UserEntity(Long id, String userFirstName, String userLastName, String password, String email, String phone, Long birthday, LocalDateTime createdAt, String address) {
+        this.id = id;
+        this.userFirstName = userFirstName;
+        this.userLastName = userLastName;
+        this.password = password;
+        this.email = email;
+        this.phone = phone;
+        this.birthday = birthday;
+        this.createdAt = createdAt;
+        this.address = address;
+    }
+
+    @Override
+    public String toString() {
+        return "UserEntity{" +
+                "id=" + id +
+                ", userFirstName='" + userFirstName + '\'' +
+                ", userLastName='" + userLastName + '\'' +
+                ", password='" + password + '\'' +
+                ", email='" + email + '\'' +
+                ", phone='" + phone + '\'' +
+                ", birthday=" + birthday +
+                ", createdAt=" + createdAt +
+                ", address='" + address + '\'' +
+                '}';
+    }
+}
