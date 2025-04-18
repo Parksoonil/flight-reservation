@@ -12,7 +12,11 @@ import org.springframework.security.web.server.SecurityWebFilterChain;
 public class SecurityConfig {
     @Bean
     public SecurityWebFilterChain securityFilterChain(ServerHttpSecurity http){
-        http.authorizeExchange(exchange -> exchange
+        http
+                .cors()
+                .and()
+                .csrf(ServerHttpSecurity.CsrfSpec::disable)
+                .authorizeExchange(exchange -> exchange
                 .pathMatchers("/api/users/login", "/api/users/register").permitAll()
                 .anyExchange().permitAll()
         );
