@@ -42,9 +42,11 @@ public class UserController {
         List<String> roles = Collections.singletonList("ROLE_USER");
         String token = jwtTokenProvider.createToken(user.getEmail(), roles);
         System.out.println("토큰 : " + token);
+
         ValueOperations<String, Object> ops = redisTemplate.opsForValue();
         ops.set(token, user, jwtTokenProvider.getValidityInSeconds(), TimeUnit.MILLISECONDS);
         System.out.println("redis : " + ops);
+
         Map<String, Object> response = new HashMap<>();
         response.put("token", token);
         response.put("user", user);
