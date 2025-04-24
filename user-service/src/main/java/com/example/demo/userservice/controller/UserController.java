@@ -1,6 +1,5 @@
 package com.example.demo.userservice.controller;
 
-import com.example.demo.userservice.component.JwtTokenProvider;
 import com.example.demo.userservice.dto.LoginRequest;
 import com.example.demo.userservice.entity.UserEntity;
 import com.example.demo.userservice.service.UserService;
@@ -20,62 +19,11 @@ import java.util.concurrent.TimeUnit;
 public class UserController {
 
     private final UserService userService;
-    private final JwtTokenProvider jwtTokenProvider;
-    private final RedisTemplate<String, Object> redisTemplate;
 
-    public UserController(UserService userService, JwtTokenProvider jwtTokenProvider, RedisTemplate<String, Object> redisTemplate) {
+    public UserController(UserService userService) {
         this.userService = userService;
-        this.jwtTokenProvider = jwtTokenProvider;
-        this.redisTemplate = redisTemplate;
     }
 
-    @PostMapping("/login")
-    public ResponseEntity<?> login(@RequestBody LoginRequest loginRequest) {
-        Optional<UserEntity> userOptional = userService.findByEmail(loginRequest.getEmail());
-        if(userOptional.isEmpty()) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid email");
-        }
-        UserEntity user = userOptional.get();
-        if(!user.getPassword().equals(loginRequest.getPassword())) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid password");
-        }
-        List<String> roles = Collections.singletonList("ROLE_USER");
-        String token = jwtTokenProvider.createToken(user.getEmail(), roles);
-        System.out.println("토큰 : " + token);
-
-        ValueOperations<String, Object> ops = redisTemplate.opsForValue();
-        ops.set(token, user, jwtTokenProvider.getValidityInSeconds(), TimeUnit.MILLISECONDS);
-        System.out.println("redis : " + ops);
-
-        Map<String, Object> response = new HashMap<>();
-        response.put("token", token);
-        response.put("user", user);
-
-        return ResponseEntity.ok(response);
-    }
-
-    @PostMapping("/logout")
-    public ResponseEntity<?> logout(HttpServletRequest request) {
-        String token = resolveToken(request);
-        if(token == null || !jwtTokenProvider.validateToken(token)) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Invalid token");
-        }
-        Boolean delete = redisTemplate.delete(token);
-        if(Boolean.TRUE.equals(delete)) {
-            return ResponseEntity.ok("Logout successful");
-        } else {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                    .body("Invalid token");
-        }
-    }
-
-    private String resolveToken(HttpServletRequest request) {
-        String bearerToken = request.getHeader("Authorization");
-        if (bearerToken != null && bearerToken.startsWith("Bearer ")) {
-            return bearerToken.substring(7);
-        }
-        return null;
-    }
 
     @GetMapping
     @Operation(summary = "유저 목록 조회", description = "등록된 모든 유저를 가져옵니다.")
@@ -88,6 +36,12 @@ public class UserController {
     @Operation(summary = "유저 ID로 유저 검색", description = "ID로 검색된 유저를 가져옵니다.")
     public ResponseEntity<UserEntity> findById(@PathVariable Long id) {
         Optional<UserEntity> user = userService.findById(id);
+        return ResponseEntity.ok(user.orElse(null));
+    }
+    @GetMapping("/{email}")
+    @Operation(summary = "유저 이메일로 유저 찾기", description = "이메일로 검색된 유저를 가져옵니다.")
+    public ResponseEntity<UserEntity> findById(@PathVariable String email) {
+        Optional<UserEntity> user = userService.findByEmail(email);
         return ResponseEntity.ok(user.orElse(null));
     }
 

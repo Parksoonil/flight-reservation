@@ -1,6 +1,5 @@
 package com.example.demo.userservice;
 
-import com.example.demo.userservice.component.JwtTokenProvider;
 import com.example.demo.userservice.controller.UserController;
 import com.example.demo.userservice.dto.LoginRequest;
 import com.example.demo.userservice.entity.UserEntity;

@@ -31,6 +31,11 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public Optional<UserEntity> updatePass(String email, String password) {
+        return Optional.empty();
+    }
+
+    @Override
     public UserEntity createUser(UserEntity user) {
         return userRepository.save(user);
     }

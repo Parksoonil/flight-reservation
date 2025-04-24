@@ -9,19 +9,28 @@ function Login() {
     const [error, setError] = useState('');
     const dispatch = useDispatch();
 
-    const handleLogin = async(e) => {
+    const handleLogin = async (e) => {
         e.preventDefault();
         try {
-            const res = await apiClient.post('api/users/login', {email, password});
-            const token = res.data;
-            localStorage.setItem("token", token);
-            dispatch(login({email, token}));
+            // withCredentials 옵션을 활성화하여 HTTPOnly 쿠키가 Set-Cookie 헤더를 통해 전달될 수 있도록 합니다.
+            const res = await apiClient.post(
+                'api/users/login',
+                { email, password },
+                { withCredentials: true }  // 서버와 클라이언트가 동일 도메인 혹은 CORS 설정을 갖추어야 합니다.
+            );
+
+            // HTTPOnly 쿠키에 토큰이 이미 설정되었으므로, 응답에는 사용자 정보만 필요합니다.
+            const { user } = res.data;
+
+            // Redux 로그인 액션에서는 토큰 정보를 따로 저장하지 않고, 사용자 정보만 저장할 수 있습니다.
+            dispatch(login({ email: user.email, user }));
+
             alert('로그인 성공');
-        } catch(err) {
-            console.log("로그인 오류", err);
-            setError("이메일 또는 비밀번호 확인")
+        } catch (err) {
+            console.error("로그인 오류", err);
+            setError("이메일 또는 비밀번호를 확인해 주세요");
         }
-    }
+    };
 
     return (
         <section className="bg-gray-50 dark:bg-gray-900 min-h-screen">

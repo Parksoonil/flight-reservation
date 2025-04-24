@@ -1,5 +1,6 @@
-package com.example.demo.userservice.component;
+package com.example.demo.userservice.component.impl;
 
+import com.example.demo.userservice.component.TokenProvider;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
@@ -10,18 +11,20 @@ import java.security.Key;
 import java.util.Date;
 import java.util.List;
 
-@Component
-public class JwtTokenProvider {
-
+@Component("accessTokenProvider")
+public class AccessTokenProviderImpl implements TokenProvider {
     private final Key jwtSecret = Keys.secretKeyFor(SignatureAlgorithm.HS512);
-    private final long validityInSeconds = 60*60*1000;
+    private final long validityInMillis = 60 * 60 * 1000; // 1시간
 
+    @Override
     public String createToken(String email, List<String> roles) {
+        // 액세스 토큰은 이메일과 함께 클레임에 역할(roles) 정보를 포함
         Claims claims = Jwts.claims().setSubject(email);
         claims.put("roles", roles);
 
         Date now = new Date();
-        Date validity = new Date(now.getTime() + validityInSeconds);
+        Date validity = new Date(now.getTime() + validityInMillis);
+
         return Jwts.builder()
                 .setClaims(claims)
                 .setIssuedAt(now)
@@ -30,10 +33,12 @@ public class JwtTokenProvider {
                 .compact();
     }
 
-    public long getValidityInSeconds() {
-        return validityInSeconds;
+    @Override
+    public long getValidityInMillis() {
+        return validityInMillis;
     }
 
+    @Override
     public boolean validateToken(String token) {
         try {
             Jwts.parser().setSigningKey(jwtSecret).parseClaimsJws(token);
@@ -43,7 +48,7 @@ public class JwtTokenProvider {
         }
     }
 
-    // JWT에서 이메일 정보를 추출
+    @Override
     public String getEmailFromToken(String token) {
         return Jwts.parser()
                 .setSigningKey(jwtSecret)
