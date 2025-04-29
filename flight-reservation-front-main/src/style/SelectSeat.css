@@ -1,0 +1,33 @@
+.select-seat-container {
+    text-align: center;
+    padding: 20px;
+}
+
+.seat-container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    max-width: 300px;
+    margin: 0 auto;
+    gap: 10px;
+}
+
+.seat {
+    width: 40px;
+    height: 40px;
+    background-color: #ccc;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-weight: bold;
+}
+
+.seat.selected {
+    background-color: #4caf50;
+    color: white;
+}
+
+.button-group button {
+    margin: 0 10px;
+    padding: 10px 20px;
+}

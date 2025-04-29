@@ -1,0 +1,83 @@
+/* ===== 공통 ===== */
+#airport-map {
+    width: 65%;
+    height: 550px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.custom-marker {
+    background: #fff;
+    border: 2px solid #007bff;
+    border-radius: 10px;
+    padding: 4px 8px;
+    font-size: 13px;
+    font-weight: bold;
+    color: #007bff;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.15);
+    cursor: pointer;
+    transition: background 0.2s;
+}
+.custom-marker:hover {
+    background: #e6f2ff;
+}
+.custom-marker.selected {
+    background-color: #007bff;
+    color: white;
+    border: 1px solid #007bff;
+}
+
+/* ===== 오른쪽 리스트 영역 ===== */
+.flight-list-container {
+    flex: 1;
+    margin-top: 1rem;
+    max-height: 550px;
+    display: flex;
+    flex-direction: column;
+    padding-right: 4px;
+}
+
+.flight-info {
+    margin: 1rem;
+}
+
+.flight-list-scroll {
+    flex: 1;
+    overflow-y: auto;
+    padding-right: 4px;
+}
+
+.flight-list-item {
+    padding: 0.7rem;
+    border: 1px solid #ccc;
+    min-height: 5rem;
+    font-size: 14px;
+    line-height: 1.5;
+}
+
+.no-flight-message {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+    text-align: center;
+}
+
+.emoji {
+    font-size: 48px;
+    margin-bottom: 10px;
+}
+
+.no-flight-message p {
+    font-size: 16px;
+    color: #555;
+}
+
+
+
+/* ===== 레이아웃 전체 ===== */
+.map-layout {
+    display: flex;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.15);
+}
+

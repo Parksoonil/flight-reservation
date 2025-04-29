@@ -1,18 +1,12 @@
 package com.example.demo.userservice.controller;
 
-import com.example.demo.userservice.dto.LoginRequest;
 import com.example.demo.userservice.entity.UserEntity;
 import com.example.demo.userservice.service.UserService;
 import io.swagger.v3.oas.annotations.Operation;
-import jakarta.servlet.http.HttpServletRequest;
-import org.springframework.data.redis.core.RedisTemplate;
-import org.springframework.data.redis.core.ValueOperations;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.*;
-import java.util.concurrent.TimeUnit;
 
 @RestController
 @RequestMapping("api/users")
@@ -23,7 +17,6 @@ public class UserController {
     public UserController(UserService userService) {
         this.userService = userService;
     }
-
 
     @GetMapping
     @Operation(summary = "유저 목록 조회", description = "등록된 모든 유저를 가져옵니다.")

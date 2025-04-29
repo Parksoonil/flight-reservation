@@ -1,0 +1,79 @@
+.board-write-container {
+  max-width: 800px;
+  margin: 20px auto;
+  padding: 20px;
+  background: linear-gradient(135deg, #f0f9ff, #ffffff);
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  border-radius: 8px;
+}
+
+.board-write-title {
+  text-align: center;
+  color: #333;
+}
+
+.board-write-form {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+}
+
+.form-label {
+  font-size: 1.1rem;
+  margin-bottom: 5px;
+  color: #333;
+}
+
+.form-input,
+.form-textarea {
+  width: 100%;
+  padding: 10px;
+  font-size: 1rem;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  box-sizing: border-box;
+}
+
+.form-textarea {
+  height: 200px;
+  resize: vertical;
+}
+
+.form-checkbox {
+  margin-left: 10px;
+}
+
+.form-buttons {
+  display: flex;
+  justify-content: space-between;
+}
+
+.form-button-submit,
+.form-button-cancel {
+  background-color: #007bff;
+  color: white;
+  padding: 10px 20px;
+  font-size: 1rem;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  width: 48%;
+}
+
+.form-button-submit:hover {
+  background-color: #0056b3;
+}
+
+.form-button-cancel {
+  background-color: #6c757d;
+}
+
+.form-button-cancel:hover {
+  background-color: #5a6268;
+}

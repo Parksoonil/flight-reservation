@@ -1,0 +1,53 @@
+.flight-detail-container {
+    max-width: 700px;
+    margin: 30px auto;
+    padding: 20px;
+    border-radius: 8px;
+    background-color: #f8f9fa;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.flight-content {
+    display: flex;
+    align-items: stretch;
+    gap: 20px;
+}
+
+.flight-detail-table {
+    flex: 7;
+    border-collapse: collapse;
+    width: 100%;
+}
+
+.flight-detail-table th,
+.flight-detail-table td {
+    text-align: left;
+    padding: 10px 12px;
+    border-bottom: 1px solid #ddd;
+}
+
+.flight-detail-table th {
+    width: 35%;
+    background-color: #e9ecef;
+    font-weight: 600;
+}
+
+.button-group {
+    text-align: center;
+    margin-top: 20px;
+}
+
+.book-button {
+    padding: 10px 20px;
+    font-size: 16px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.book-button:hover {
+    background-color: #0056b3;
+}

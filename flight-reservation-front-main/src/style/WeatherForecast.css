@@ -1,0 +1,75 @@
+.weather-container {
+    padding: 20px;
+    min-height: 350px;
+    background: linear-gradient(135deg, #f0f9ff, #ffffff);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+}
+
+.weather-cards-wrapper {
+    display: flex;
+    overflow-x: auto;
+}
+
+.weather-cards {
+    display: flex;
+    gap: 10px;
+}
+
+.weather-card {
+    flex: 0 0 200px;
+    max-width: 300px;
+    border: 1px solid #ddd;
+    padding-bottom: 10px;
+    background-color: #fff;
+    margin-bottom: 20px;
+    text-align: center;
+    border-radius: 10px;
+}
+
+.weather-card h3 {
+    font-size: 18px;
+    text-align: left;
+    font-weight: bold;
+    color: #333;
+    margin-left: 10px;
+}
+
+.weather-icon {
+    font-size: 48px;
+    margin-bottom: 10px;
+}
+
+.weather-desc {
+    font-size: 13px;
+    color: #666;
+    margin-bottom: 5px;
+}
+
+.rain-prob {
+    font-size: 12px;
+    color: #888;
+}
+
+.region-selection {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 20px;
+}
+
+.region-selection button {
+    background-color: white;
+    color: black;
+    border: 2px solid #ccc;
+    padding: 10px 20px;
+    border-radius: 20px;
+    cursor: pointer;
+}
+
+.region-selection button:hover {
+    background-color: #ddd;
+}
+
+.region-selection button.selected {
+    background-color: #59a7f6;
+    color: white;
+}

@@ -1,0 +1,110 @@
+.search-box {
+    margin-top: 20vh;
+}
+
+.list-section {
+    margin: 0 10vw;
+}
+
+.selected-flights-box {
+    display: flex;
+    align-items: flex-start;
+    gap: 2rem;
+    padding: 1.5rem;
+    background-color: #f5faff;
+    border: 2px solid #aad4f5;
+    border-radius: 16px;
+    margin: 2rem auto;
+    width: 80%;
+}
+
+.flight-info-box {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    width: 50%;
+}
+
+.selected-flights-list {
+    background-color: #ffffff;
+    border: 1px solid #ccc;
+    padding: 1rem;
+    border-radius: 12px;
+    margin-bottom: 1rem;
+    max-height: 400px;
+    overflow-y: auto;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+    height: 350px;
+    width: 500px;
+}
+
+.selected-flight1 {
+    background: #f8f9ff;
+    padding: 0.6rem 1rem;
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    margin-bottom: 0.6rem;
+    font-weight: 500;
+    color: #333;
+    transition: background 0.2s ease;
+}
+
+.selected-flight1:hover {
+    background-color: #e6f0ff;
+}
+
+.send-button {
+    padding: 0.75rem 1.5rem;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 10px;
+    font-size: 1rem;
+    font-weight: bold;
+    cursor: pointer;
+    align-self: flex-end;
+    transition: background-color 0.3s ease;
+}
+
+.send-button:hover {
+    background-color: #0056b3;
+}
+
+/* 왕복 컨테이너 */
+.flight-pair-container1 {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    margin-bottom: 1rem;
+
+}
+
+.flight-card1 {
+    background-color: #f5f9ff;
+    border: 1px solid #cce4ff;
+    border-radius: 10px;
+    padding: 1rem;
+    box-shadow: 0 3px 6px rgba(0, 0, 0, 0.05);
+}
+
+.route1 {
+    font-weight: bold;
+    font-size: 1.1rem;
+    color: #1e90ff;
+}
+
+.date1 {
+    margin-top: 4px;
+    color: #333;
+    font-size: 0.95rem;
+}
+
+.details1 {
+    margin-top: 6px;
+    font-size: 0.9rem;
+    color: #555;
+}
+
+.flight{
+    margin-top: 20vh;
+}

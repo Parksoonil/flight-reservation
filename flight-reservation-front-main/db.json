@@ -1,0 +1,249 @@
+{
+  "users": [
+    {
+      "id": "1",
+      "username": "user",
+      "password": "1234",
+      "name": "Test User"
+    },
+    {
+      "id": "f08c",
+      "username": "user1",
+      "password": "1234",
+      "name": "aaa"
+    }
+  ],
+  "reservations": [
+    {
+      "id": "8def",
+      "selectedSeats": [
+        11
+      ],
+      "contact": "1",
+      "request": "",
+      "userId": "1",
+      "username": "user",
+      "paymentComplete": true,
+      "reservedAt": "2025-04-23T07:58:34.661Z",
+      "flight": {
+        "id": 9,
+        "departureName": "김포공항",
+        "arrivalName": "제주공항",
+        "departureTime": "2025-05-09T10:30",
+        "arrivalTime": "2025-05-09T13:00",
+        "aircraftType": "Boeing 777",
+        "flightClass": "Business",
+        "seatCount": 190,
+        "price": 150000
+      }
+    },
+    {
+      "id": "2d17",
+      "selectedSeats": [
+        11
+      ],
+      "contact": "1",
+      "request": "",
+      "userId": "1",
+      "username": "user",
+      "paymentComplete": true,
+      "reservedAt": "2025-04-23T07:58:34.661Z",
+      "flight": {
+        "id": 4,
+        "departureName": "제주공항",
+        "arrivalName": "김포공항",
+        "departureTime": "2025-05-04T06:45",
+        "arrivalTime": "2025-05-04T08:30",
+        "aircraftType": "Boeing 737",
+        "flightClass": "Economy",
+        "seatCount": 180,
+        "price": 150000
+      }
+    },
+    {
+      "id": "5471",
+      "selectedSeats": [
+        1
+      ],
+      "contact": "1",
+      "request": "",
+      "userId": "1",
+      "username": "user",
+      "paymentComplete": true,
+      "reservedAt": "2025-04-23T08:00:48.729Z",
+      "flight": {
+        "id": 2,
+        "departureName": "인천공항",
+        "arrivalName": "김해공항",
+        "departureTime": "2025-05-02T09:15:00",
+        "arrivalTime": "2025-05-02T12:00:00",
+        "aircraftType": "Airbus A320",
+        "seatCount": 250,
+        "flightClass": "Business"
+      }
+    },
+    {
+      "id": "0d72",
+      "selectedSeats": [
+        3
+      ],
+      "contact": "0120",
+      "request": "",
+      "userId": "1",
+      "username": "user",
+      "paymentComplete": true,
+      "reservedAt": "2025-04-24T01:35:29.666Z",
+      "flight": {
+        "id": 1,
+        "departureName": "김포공항",
+        "arrivalName": "인천공항",
+        "departureTime": "2025-05-01T08:00:00",
+        "arrivalTime": "2025-05-01T10:30:00",
+        "aircraftType": "Boeing 737",
+        "seatCount": 150,
+        "flightClass": "Economy"
+      }
+    },
+    {
+      "id": "6c0f",
+      "selectedSeats": [
+        2
+      ],
+      "contact": "1",
+      "request": "",
+      "paymentComplete": true,
+      "reservedAt": "2025-04-24T01:41:47.341Z",
+      "flight": {
+        "id": 1,
+        "departureName": "김포공항",
+        "arrivalName": "인천공항",
+        "departureTime": "2025-05-01T08:00:00",
+        "arrivalTime": "2025-05-01T10:30:00",
+        "aircraftType": "Boeing 737",
+        "seatCount": 150,
+        "flightClass": "Economy"
+      }
+    },
+    {
+      "id": "1bbd",
+      "selectedSeats": [
+        3,
+        7
+      ],
+      "contact": "1",
+      "request": "",
+      "paymentComplete": true,
+      "reservedAt": "2025-04-24T02:47:04.797Z",
+      "flight": {
+        "id": 9,
+        "departureName": "김포공항",
+        "arrivalName": "제주공항",
+        "departureTime": "2025-05-09T10:30",
+        "arrivalTime": "2025-05-09T13:00",
+        "aircraftType": "Boeing 777",
+        "flightClass": "Business",
+        "seatCount": 190,
+        "price": 150000
+      }
+    },
+    {
+      "id": "0bf1",
+      "selectedSeats": [
+        3,
+        7
+      ],
+      "contact": "1",
+      "request": "",
+      "paymentComplete": true,
+      "reservedAt": "2025-04-24T02:47:04.797Z",
+      "flight": {
+        "id": 4,
+        "departureName": "제주공항",
+        "arrivalName": "김포공항",
+        "departureTime": "2025-05-04T06:45",
+        "arrivalTime": "2025-05-04T08:30",
+        "aircraftType": "Boeing 737",
+        "flightClass": "Economy",
+        "seatCount": 180,
+        "price": 150000
+      }
+    },
+    {
+      "id": "c559",
+      "selectedSeats": [
+        7
+      ],
+      "contact": "01038201132",
+      "request": "",
+      "paymentComplete": true,
+      "reservedAt": "2025-04-26T16:09:09.314Z",
+      "flight": {
+        "id": 8,
+        "departureName": "제주공항",
+        "arrivalName": "인천공항",
+        "departureTime": "2025-05-08T18:15",
+        "arrivalTime": "2025-05-08T20:30",
+        "aircraftType": "Airbus A320",
+        "flightClass": "First Class",
+        "seatCount": 220,
+        "price": 150000
+      }
+    }
+  ],
+  "boards": [
+    {
+      "id": "a1b2",
+      "title": "항공편 취소 안내",
+      "content": "2025년 5월 1일부터 2025년 5월 5일까지의 항공편 일부가 기상 악화로 인해 취소될 예정입니다. 예약하신 고객님께서는 취소 여부를 확인하시고, 재예약을 진행해주시기 바랍니다.",
+      "author": "고객센터",
+      "created_at": "2025-04-26T14:00:00.000Z",
+      "views": 540,
+      "pinned": true
+    },
+    {
+      "id": "b2c3",
+      "title": "공항 보안 강화 안내",
+      "content": "2025년 6월 1일부터 모든 국제선 항공편에 대해 보안 강화 조치가 시행됩니다. 탑승 수속 시 추가적인 보안 점검을 받으셔야 하므로, 출발 3시간 전까지 공항에 도착해주시기 바랍니다.",
+      "author": "고객센터",
+      "created_at": "2025-04-25T10:30:00.000Z",
+      "views": 333,
+      "pinned": false
+    },
+    {
+      "id": "c3d4",
+      "title": "연휴 기간 항공권 예약 마감 안내",
+      "content": "다가오는 연휴 기간 동안 항공권 예약이 급증할 것으로 예상됩니다. 예약을 원하시는 고객님께서는 빠른 시일 내에 예약을 완료해주시기 바랍니다. 예약 마감 일정은 홈페이지를 통해 확인해주세요.",
+      "author": "항공사 예약팀",
+      "created_at": "2025-04-24T09:00:00.000Z",
+      "views": 215,
+      "pinned": false
+    },
+    {
+      "id": "d4e5",
+      "title": "기내식 메뉴 변경 안내",
+      "content": "2025년 5월 10일부터 일부 항공편에서 제공되는 기내식 메뉴가 변경됩니다. 특정 기내식의 사전 예약이 가능하오니, 예약 시 메뉴 옵션을 확인해주시기 바랍니다.",
+      "author": "서비스팀",
+      "created_at": "2025-04-23T15:00:00.000Z",
+      "views": 139,
+      "pinned": false
+    },
+    {
+      "id": "e5f6",
+      "title": "새로운 마일리지 적립 혜택 발표",
+      "content": "2025년 6월 1일부터 항공사 마일리지 적립 프로그램에 대한 새로운 혜택이 적용됩니다. 고객님들은 새로운 혜택 내용을 확인하고, 마일리지 적립 및 사용 방법을 참고해 주세요.",
+      "author": "마케팅팀",
+      "created_at": "2025-04-22T11:30:00.000Z",
+      "views": 182,
+      "pinned": false
+    },
+    {
+      "id": "6f7b",
+      "title": "임시 제목입니다.",
+      "content": "임시 내용입니다.",
+      "author": "테스트",
+      "created_at": "2025-04-27T13:59:56.949Z",
+      "views": 1,
+      "pinned": false
+    }
+  ]
+}

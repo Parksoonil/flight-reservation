@@ -1,0 +1,88 @@
+.recent-boards {
+  margin: 20px;
+}
+
+.recent-boards-header {
+  font-size: 2rem;
+  font-weight: bold;
+  margin-bottom: 20px;
+}
+
+.recent-boards-header-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.more-post-button {
+  background-color: transparent;
+  border: none;
+  font-size: 40px;
+  cursor: pointer;
+  color: #333;
+}
+
+.boards-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 20px;
+}
+
+.boards-table th,
+.boards-table td {
+  padding: 10px;
+  text-align: left;
+}
+
+.boards-table th {
+  background-color: #f0f9ff;
+  font-weight: bold;
+}
+
+.boards-table tr:nth-child(even) {
+  background-color: #f9f9f9;
+}
+
+.boards-table tr:hover {
+  background-color: #f1f1f1;
+  cursor: pointer;
+}
+
+.boards-table td:nth-child(1),
+.boards-table th:nth-child(1) {
+  width: 10%;
+  /* 작성일 */
+}
+
+.boards-table td:nth-child(2),
+.boards-table th:nth-child(2) {
+  width: 60%;
+  /* 제목 */
+  text-align: center;
+}
+
+.boards-table td:nth-child(3),
+.boards-table th:nth-child(3) {
+  width: 20%;
+  /* 작성자 */
+}
+
+.boards-table td:nth-child(4),
+.boards-table th:nth-child(4) {
+  width: 10%;
+  /* 조회수 */
+}
+
+.board-page-loading {
+  text-align: center;
+  font-size: 1.2rem;
+  color: #555;
+  padding: 20px;
+}
+
+.boards-table td[colspan="4"] {
+  text-align: center;
+  padding: 30px;
+  font-size: 1.2rem;
+  color: #999;
+}

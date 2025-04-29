@@ -1,0 +1,27 @@
+.reservation-layout {
+  background-color: #f4f6f8;
+  min-height: 100vh;
+  padding: 40px 20px;
+}
+
+.reservation-content {
+  max-width: 960px;
+  margin: 0 auto;
+  background-color: #ffffff;
+  border-radius: 12px;
+  padding: 40px;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.08);
+  margin-top: 10vh;
+}
+
+.button-group {
+  align-content: flex-end;
+}
+
+.reservation-layout button {
+  padding: 12px 25px;
+  font-size: 16px;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+}
