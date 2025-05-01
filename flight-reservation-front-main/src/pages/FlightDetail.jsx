@@ -30,7 +30,7 @@ function FlightDetail() {
       return;
     }
 
-    navigate("/rsv/seat");
+    navigate("/loading");
   };
 
   const renderFlightTable = (flight, title) => (

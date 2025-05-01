@@ -3,7 +3,8 @@ import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import apiClient from "../apiClient.jsx";
 import "../style/Login.css";
-import { login } from "../store/authSlice"; // Redux 로그인 액션 (예시)
+import { login } from "../store/authSlice";
+import {jwtDecode} from "jwt-decode";
 
 function Login() {
     const navigate = useNavigate();
@@ -16,16 +17,18 @@ function Login() {
     const handleLogin = async (e) => {
         e.preventDefault();
         try {
-            // withCredentials 옵션을 활성화하여 HTTPOnly 쿠키가 서버의 Set-Cookie 헤더를 통해 전달되도록 합니다.
+            // 서버 요청: 이제 사용자 정보 대신 accessToken만 반환한다고 가정
             const res = await apiClient.post(
                 "api/users/login",
-                { email, password },
-                { withCredentials: true }
+                { email, password }
             );
-            // HTTPOnly 쿠키에 액세스 토큰이 이미 설정되었으므로, 응답에는 사용자 정보만 포함됩니다.
-            const { user } = res.data;
-            // Redux 로그인 액션을 dispatch하여 사용자 정보를 저장합니다.
-            dispatch(login({ email: user.email, user }));
+            const { accessToken } = res.data;
+
+            const decoded = jwtDecode(accessToken);
+            const userEmail = decoded.sub; // 토큰 발급 시 setSubject(email) 했던 값
+
+            // Redux를 통해 로그인 상태 업데이트 (필요한 경우 decoded 전체를 저장해도 됨)
+            dispatch(login({ email: userEmail, accessToken, user: decoded }));
 
             alert("로그인 성공");
             navigate("/");

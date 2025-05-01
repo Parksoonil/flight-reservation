@@ -16,7 +16,7 @@ const BoardPage = () => {
                 const sortedBoards = response.data
                     .sort((a, b) => {
                         if (a.pinned === b.pinned) {
-                            return new Date(b.created_at) - new Date(a.created_at);
+                            return new Date(b.createdDate) - new Date(a.createdDate);
                         }
                         return a.pinned ? -1 : 1;
                     });
@@ -42,28 +42,26 @@ const BoardPage = () => {
             <h1 className="page-title">공지사항</h1>
             <table className="board-table">
                 <thead>
-                    <tr>
-                        <th>작성일</th>
-                        <th>제목</th>
-                        <th>작성자</th>
-                        <th>조회수</th>
-                    </tr>
+                <tr>
+                    <th>작성일</th>
+                    <th>제목</th>
+                    <th>작성자</th>
+                </tr>
                 </thead>
                 <tbody>
-                    {boards.length === 0 ? (
-                        <tr>
-                            <td colSpan="4" className="no-posts">최근 게시글이 없습니다.</td>
+                {boards.length === 0 ? (
+                    <tr>
+                        <td colSpan="3" className="no-posts">최근 게시글이 없습니다.</td>
+                    </tr>
+                ) : (
+                    boards.map((board) => (
+                        <tr key={board.id} onClick={() => handleBoardClick(board.id)}>
+                            <td>{new Date(board.createdDate).toLocaleDateString()}</td>
+                            <td>{board.title}</td>
+                            <td>{board.author}</td>
                         </tr>
-                    ) : (
-                        boards.map((board) => (
-                            <tr key={board.id} onClick={() => handleBoardClick(board.id)}>
-                                <td>{new Date(board.created_at).toLocaleDateString()}</td>
-                                <td>{board.title}</td>
-                                <td>{board.author}</td>
-                                <td>{board.views}</td>
-                            </tr>
-                        ))
-                    )}
+                    ))
+                )}
                 </tbody>
             </table>
             <button className="write-button" onClick={() => navigate("/bwrite")}>글쓰기</button>

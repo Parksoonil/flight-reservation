@@ -27,6 +27,7 @@ public class AuthController {
     public ResponseEntity<?> login(@RequestBody LoginRequest loginRequest, HttpServletResponse response) {
         try {
             Map<String, Object> responseBody = authService.login(loginRequest, response);
+            System.out.println(responseBody);
             return ResponseEntity.ok(responseBody);
         } catch (AuthException e) {
             return ResponseEntity.status(e.getStatus()).body(e.getMessage());

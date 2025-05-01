@@ -1,17 +1,17 @@
 import { useEffect, useRef, useState } from "react";
 import axios from "axios";
 import "../style/SimpleAirportMap.css";
+import apiClient from "../apiClient.jsx";
 
 const airportCoords = {
-    "김포공항": { lat: 37.5585, lng: 126.7902 },
-    "인천공항": { lat: 37.1002, lng: 126.4407 },
-    "김해공항": { lat: 35.1796, lng: 128.9381 },
-    "제주공항": { lat: 33.5104, lng: 126.4910 },
-    "청주공항": { lat: 36.7179, lng: 127.4990 },
-    "무안공항": { lat: 34.9914, lng: 126.3828 },
-    "양양공항": { lat: 37.8813, lng: 128.6690 },
-    "대구공항": { lat: 35.8941, lng: 128.6585 },
-    "공항": { lat: 37, lng: 125 },
+    "김포국제공항": { lat: 37.5585, lng: 126.7902 },
+    "인천국제공항": { lat: 37.1002, lng: 126.4407 },
+    "김해국제공항": { lat: 35.1796, lng: 128.9381 },
+    "제주국제공항": { lat: 33.5104, lng: 126.4910 },
+    "청주국제공항": { lat: 36.7179, lng: 127.4990 },
+    "무안국제공항": { lat: 34.9914, lng: 126.3828 },
+    "양양국제공항": { lat: 37.8813, lng: 128.6690 },
+    "대구국제공항": { lat: 35.8941, lng: 128.6585 },
 };
 
 function SimpleAirportMap() {
@@ -23,8 +23,8 @@ function SimpleAirportMap() {
 
     const fetchFlightList = async (from, to) => {
         try {
-            const res = await axios.get(
-                `http://localhost:8080/api/flights/search?tripType=oneway&departure=${from}&arrival=${to}`
+            const res = await apiClient.get(
+                `/api/flights/search?tripType=oneway&departure=${from}&arrival=${to}`
             );
             setFlights(res.data.content);
             console.log(res.data);

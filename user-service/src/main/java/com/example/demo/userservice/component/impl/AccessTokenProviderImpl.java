@@ -1,10 +1,13 @@
 package com.example.demo.userservice.component.impl;
 
 import com.example.demo.userservice.component.TokenProvider;
+import com.example.demo.userservice.entity.UserEntity;
+import com.example.demo.userservice.repository.UserRepository;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.security.Keys;
+import org.apache.catalina.User;
 import org.springframework.stereotype.Component;
 
 import java.security.Key;
@@ -15,13 +18,20 @@ import java.util.List;
 public class AccessTokenProviderImpl implements TokenProvider {
     private final Key jwtSecret = Keys.secretKeyFor(SignatureAlgorithm.HS512);
     private final long validityInMillis = 60 * 60 * 1000; // 1시간
+    private final UserRepository userRepository;
+
+    public AccessTokenProviderImpl(UserRepository userRepository) {
+        this.userRepository = userRepository;
+    }
 
     @Override
     public String createToken(String email, List<String> roles) {
         // 액세스 토큰은 이메일과 함께 클레임에 역할(roles) 정보를 포함
         Claims claims = Jwts.claims().setSubject(email);
         claims.put("roles", roles);
-
+        userRepository.findByEmail(email).ifPresent(user -> {
+            claims.put("userid", user.getId());
+        });
         Date now = new Date();
         Date validity = new Date(now.getTime() + validityInMillis);
 

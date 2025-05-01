@@ -114,11 +114,11 @@ function FlightList({ filters, allFlights = [], onSelectedFlights }) {
 
     const handleBookingClick = () => {
         if (filters?.tripType === "round") {
-            navigate("/flight/detail", {
+            navigate("/loading", {
                 state: { goFlight: roundTripFlights.goList.find(flight => flight.id === selectedGoFlight), backFlight: roundTripFlights.backList.find(flight => flight.id === selectedBackFlight) }
             });
         } else {
-            navigate("/flight/detail", { state: { flight: oneWayFlights.find(flight => flight.id === selectedGoFlight) } });
+            navigate("/loading", { state: { flight: oneWayFlights.find(flight => flight.id === selectedGoFlight) } });
         }
     };
 

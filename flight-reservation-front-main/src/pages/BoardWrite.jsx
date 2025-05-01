@@ -18,8 +18,7 @@ const BoardWrite = () => {
             title,
             content,
             author,
-            created_at: new Date().toISOString(),
-            views: 0,
+            createdDate: new Date().toISOString(),
             pinned,
         };
 

@@ -16,7 +16,7 @@ const Boards = () => {
         const sortedBoards = response.data
           .sort((a, b) => {
             if (a.pinned === b.pinned) {
-              return new Date(b.created_at) - new Date(a.created_at);
+              return new Date(b.createdDate) - new Date(a.createdDate);
             }
             return a.pinned ? -1 : 1;
           })
@@ -40,48 +40,41 @@ const Boards = () => {
   };
 
   return (
-    <div className="recent-boards">
-      <div className="recent-boards-header-container">
-        <h1 className="recent-boards-header">공지사항</h1>
-        <button 
-          className="more-post-button" 
-          onClick={handleMorePostClick}
-        >
-          +
-        </button>
-      </div>
+      <div className="recent-boards">
+          <div className="recent-boards-header-container">
+              <h1 className="recent-boards-header">공지사항</h1>
+              <button className="more-post-button" onClick={handleMorePostClick}>+</button>
+          </div>
 
-      {loading ? (
-        <div className="board-page-loading">게시글을 불러오는 중...</div>
-      ) : (
-        <table className="boards-table">
-          <thead>
-            <tr>
-              <th>작성일</th>
-              <th>제목</th>
-              <th>작성자</th>
-              <th>조회수</th>
-            </tr>
-          </thead>
-          <tbody>
-            {boards.length === 0 ? (
-              <tr>
-                <td colSpan="4">최근 게시글이 없습니다.</td>
-              </tr>
-            ) : (
-              boards.map((board) => (
-                <tr key={board.id} onClick={() => handleBoardClick(board.id)}>
-                  <td>{new Date(board.created_at).toLocaleDateString()}</td>
-                  <td>{board.title}</td>
-                  <td>{board.author}</td>
-                  <td>{board.views}</td>
-                </tr>
-              ))
-            )}
-          </tbody>
-        </table>
-      )}
-    </div>
+          {loading ? (
+              <div className="board-page-loading">게시글을 불러오는 중...</div>
+          ) : (
+              <table className="boards-table">
+                  <thead>
+                  <tr>
+                      <th>작성일</th>
+                      <th>제목</th>
+                      <th>작성자</th>
+                  </tr>
+                  </thead>
+                  <tbody>
+                  {boards.length === 0 ? (
+                      <tr>
+                          <td colSpan="3">최근 게시글이 없습니다.</td>
+                      </tr>
+                  ) : (
+                      boards.map((board) => (
+                          <tr key={board.id} onClick={() => handleBoardClick(board.id)}>
+                              <td>{new Date(board.createdDate).toLocaleDateString()}</td>
+                              <td>{board.title}</td>
+                              <td>{board.author}</td>
+                          </tr>
+                      ))
+                  )}
+                  </tbody>
+              </table>
+          )}
+      </div>
   );
 };
 

@@ -21,14 +21,40 @@ import BoardWrite from "./pages/BoardWrite";
 import RplacePage from "./pages/RplacePage";
 import SplacePage from "./pages/SplacePage";
 import BoardDetail from "./pages/BoardDetail";
+import SeatInfoFormPage from "./pages/SeatInfoFormPage.jsx";
+import SeatConfirmationPage from "./pages/SeatConfirmationPage.jsx";
+import Home1 from "./pages/Home1.jsx";
+import {login} from "./store/authSlice.js";
+import {useDispatch} from "react-redux";
+import {useEffect} from "react";
+import {jwtDecode} from "jwt-decode";
 
 
 function App() {
   const location = useLocation();
+  const dispatch = useDispatch();
   const hideLayoutRoutes = ["/login", "/signup", "/payment"];
   const hideLayout = hideLayoutRoutes.includes(location.pathname);
 
-
+  useEffect(() => {
+    const token = localStorage.getItem("accessToken");
+    if (token) {
+      try {
+        const decoded = jwtDecode(token);
+        const expTime = decoded.exp * 1000;
+        if (Date.now() < expTime) {
+          // 만료되지 않은 토큰이라면 Redux 로그인 상태를 갱신합니다.
+          // 여기서는 decoded 내의 정보를 적절하게 활용하여 login 액션을 dispatch 합니다.
+          dispatch(login({ email: decoded.sub, accessToken: token, user: decoded }));
+        } else {
+          // 토큰이 만료된 경우 처리 (예: localStorage에서 삭제)
+          localStorage.removeItem("accessToken");
+        }
+      } catch (error) {
+        console.error("토큰 디코딩 실패", error);
+      }
+    }
+  }, [dispatch]);
   return (
     <div>
       {!hideLayout && <Header />}
@@ -46,14 +72,10 @@ function App() {
           <Route path="/board/:boardId" element={<BoardDetail />} />
           <Route path="/rplace" element={<RplacePage />} />
           <Route path="/splace" element={<SplacePage />} />
-
-          <Route element={<ReservationLayout />}>
-            <Route path="/flight/detail" element={<FlightDetail />} />
-            <Route path="/rsv/seat" element={<SelectSeat />} />
-            <Route path="/rsv/detail" element={<RSVDetail />} />
-            <Route path="/rsv/payment" element={<RSVPayment />} />
-            <Route path="/rsv/result" element={<RSVResult />} />
-          </Route>
+          <Route path="/loading" element={<Home1/>}/>
+          <Route path="/select/:key" element={<SelectSeat/>}/>
+          <Route path="/form/:key" element={<SeatInfoFormPage />} />
+          <Route path="/confirm/:key" element={<SeatConfirmationPage />} />
         </Routes>
       </div>
 

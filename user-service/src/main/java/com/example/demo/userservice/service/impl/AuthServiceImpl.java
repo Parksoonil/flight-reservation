@@ -62,30 +62,21 @@ public class AuthServiceImpl implements AuthService {
         System.out.println(ops.get(accessToken));
         System.out.println(ops.get(refreshToken));
 
-        // HTTPOnly 쿠키 설정 (액세스 토큰)
-        Cookie accessTokenCookie = new Cookie("accessToken", accessToken);
-        accessTokenCookie.setHttpOnly(true);
-        accessTokenCookie.setPath("/");
-        accessTokenCookie.setMaxAge((int) (accessTokenProvider.getValidityInMillis() / 1000)); // 초 단위
 
         // HTTPOnly 쿠키 설정 (리프래시 토큰)
         Cookie refreshTokenCookie = new Cookie("refreshToken", refreshToken);
         refreshTokenCookie.setHttpOnly(true);
         refreshTokenCookie.setPath("/");
         refreshTokenCookie.setMaxAge((int) (refreshTokenProvider.getValidityInMillis() / 1000));
-        System.out.println(accessTokenCookie.getValue());
+
         System.out.println(refreshTokenCookie.getValue());
 
         // 응답 객체에 쿠키 추가
-        response.addCookie(accessTokenCookie);
         response.addCookie(refreshTokenCookie);
 
         // 클라이언트로 반환할 응답 데이터 구성
         Map<String, Object> responseBody = new HashMap<>();
         responseBody.put("accessToken", accessToken);
-        responseBody.put("refreshToken", refreshToken);
-        responseBody.put("user", user);
-
         return responseBody;
     }
 

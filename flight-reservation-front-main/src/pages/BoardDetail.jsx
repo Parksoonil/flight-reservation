@@ -54,8 +54,7 @@ const BoardDetail = () => {
       <div className="board-detail-meta">
         <div className="board-detail-m">
         <p><strong>작성자:</strong> {board.author}</p>
-        <p><strong>작성일:</strong> {new Date(board.created_at).toLocaleString()}</p>
-        <p><strong>조회수:</strong> {board.views}</p>
+        <p><strong>작성일:</strong> {new Date(board.createdDate).toLocaleString()}</p>
         </div>
       </div>
       <button className="back-to-board-btn" onClick={() => navigate("/board")}>목록으로</button>
