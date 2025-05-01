@@ -1,5 +1,7 @@
 package com.example.demo.userservice.component;
 
+import io.jsonwebtoken.Claims;
+
 import java.util.List;
 
 public interface TokenProvider {
@@ -19,4 +21,6 @@ public interface TokenProvider {
      * JWT에서 이메일(Subject) 정보를 추출합니다.
      */
     String getEmailFromToken(String token);
+
+    Claims getClaimsFromToken(String token);
 }

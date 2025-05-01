@@ -6,6 +6,7 @@ import com.example.demo.userservice.entity.UserEntity;
 import com.example.demo.userservice.exception.AuthException;
 import com.example.demo.userservice.service.AuthService;
 import com.example.demo.userservice.service.UserService;
+import io.jsonwebtoken.Claims;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -14,6 +15,7 @@ import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.ValueOperations;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.*;
 import java.util.concurrent.TimeUnit;
@@ -103,5 +105,33 @@ public class AuthServiceImpl implements AuthService {
             return bearerToken.substring(7);
         }
         return null;
+    }
+    /**
+     * HTTPOnly 쿠키에 저장된 refresh 토큰을 검증 후, 새로운 액세스 토큰을 발급합니다.
+     *
+     * @param refreshToken 클라이언트로부터 전달받은 refresh 토큰 (쿠키로 전달됨)
+     * @return 새롭게 발급된 액세스 토큰
+     * @throws ResponseStatusException refresh 토큰이 없거나 유효하지 않을 경우 예외 발생 (401)
+     */
+    public String refreshAccessToken(String refreshToken) {
+        // refresh 토큰이 없으면 401 에러 발생
+        if (refreshToken == null || refreshToken.isEmpty()) {
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Refresh token is missing");
+        }
+
+        // refresh 토큰 유효성 검사
+        if (!refreshTokenProvider.validateToken(refreshToken)) {
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Invalid refresh token");
+        }
+
+        // 토큰에서 클레임 추출
+        Claims claims = refreshTokenProvider.getClaimsFromToken(refreshToken);
+        String email = claims.getSubject();
+
+        @SuppressWarnings("unchecked")
+        List<String> roles = (List<String>) claims.get("roles");
+
+        // 새 액세스 토큰 생성 및 반환
+        return accessTokenProvider.createToken(email, roles);
     }
 }

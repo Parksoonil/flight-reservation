@@ -6,11 +6,9 @@ import com.example.demo.userservice.service.AuthService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
 import java.util.Map;
 
 @RestController
@@ -42,5 +40,26 @@ public class AuthController {
         } catch (AuthException e) {
             return ResponseEntity.status(e.getStatus()).body(e.getMessage());
         }
+    }
+
+    /**
+     * HTTPOnly refresh 토큰을 이용하여 새 액세스 토큰을 발급합니다.
+     *
+     * refresh 토큰은 클라이언트측에서 직접 접근할 수 없으므로,
+     * 브라우저가 자동으로 쿠키에 저장된 값을 전송합니다.
+     *
+     * @param refreshToken HTTPOnly refresh 토큰 (쿠키에서 추출)
+     * @return 새 액세스 토큰을 포함한 JSON 응답
+     */
+    @PostMapping("/refresh")
+    public ResponseEntity<?> refreshToken(
+            @CookieValue(name = "refreshToken", required = false) String refreshToken) {
+        // authService에서 토큰 갱신 로직을 처리합니다.
+        String newAccessToken = authService.refreshAccessToken(refreshToken);
+        System.out.println("New access token: " + newAccessToken);
+        Map<String, String> tokenMap = new HashMap<>();
+        tokenMap.put("accessToken", newAccessToken);
+
+        return ResponseEntity.ok(tokenMap);
     }
 }

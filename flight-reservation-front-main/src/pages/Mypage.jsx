@@ -3,44 +3,56 @@ import { useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 import "../style/Mypage.css";
 import apiClient from "../apiClient.jsx";
+import {jwtDecode} from "jwt-decode";
 
 function MyPage() {
-    const navigate = useNavigate();
-    const { email } = useSelector((state) => state.auth); // Redux의 auth slice에서 email을 가져옵니다.
+    const { accessToken } = useSelector((state) => state.auth);
     const [user, setUser] = useState(null);
     const [reservations, setReservations] = useState([]);
+    const navigate = useNavigate();
 
     useEffect(() => {
-        // 로그인되어 있지 않다면 로그인 페이지로 이동합니다.
-        if (!email) {
+        // accessToken이 없으면 로그인 페이지로 이동합니다.
+        if (!accessToken) {
             navigate("/login");
-        } else {
-            const fetchUserAndReservations = async () => {
-                try {
-                    // 이메일을 기준으로 사용자 정보 API 호출
-                    const userResponse = await apiClient.get(`api/users?email=${email}`);
-                    let userData = null;
-                    if (Array.isArray(userResponse.data)) {
-                        // 만약 반환 값이 배열이면 첫 번째 항목을 사용합니다.
-                        userData = userResponse.data[0];
-                    } else {
-                        userData = userResponse.data;
-                    }
-                    if (userData) {
-                        setUser(userData);
-
-                        // 사용자 id를 기준으로 예약 내역 API 호출
-                        const reservationsResponse = await apiClient.get(`api/reservations?userId=${userData.id}`);
-                        setReservations(reservationsResponse.data);
-                    }
-                } catch (error) {
-                    console.error("사용자 정보 또는 예약을 불러오는 데 실패했습니다.", error);
-                }
-            };
-
-            fetchUserAndReservations();
+            return;
         }
-    }, [email, navigate]);
+
+        // 토큰을 디코드하여 userid 추출 (jwt 토큰이 올바른 형식이어야 함)
+        let userid;
+        try {
+            // 예를 들어, JWT 토큰 발급 시 claims에 "userid"를 포함시켰다면
+            const decoded = jwtDecode(accessToken);
+            userid = decoded.userid;
+        } catch (error) {
+            console.error("토큰 디코딩 실패:", error);
+            navigate("/login");
+            return;
+        }
+
+        if (!userid) {
+            navigate("/login");
+            return;
+        }
+
+        // 즉시 실행하는 async 함수를 사용하여 사용자 및 예약 정보를 가져옵니다.
+        (async () => {
+            try {
+                // 사용자 정보를 userid 기준으로 API 호출
+                const { data: userDataRaw } = await apiClient.get(`api/users?userId=${userid}`);
+                const userData = Array.isArray(userDataRaw) ? userDataRaw[0] : userDataRaw;
+                if (userData) {
+                    setUser(userData);
+
+                    // 예약 내역도 userid 기준으로 API 호출
+                    const { data: reservationsData } = await apiClient.get(`api/reservations?userId=${userid}`);
+                    setReservations(reservationsData);
+                }
+            } catch (error) {
+                console.error("사용자 정보 또는 예약을 불러오는 데 실패했습니다.", error);
+            }
+        })();
+    }, [accessToken, navigate]);
 
     return (
         <div className="my-page">

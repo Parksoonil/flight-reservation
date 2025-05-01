@@ -39,9 +39,20 @@ public class UserEntity implements Serializable {
     @Column
     private String address;
 
+    @Column(nullable = false, columnDefinition = "boolean default false")
+    private boolean admin;
+
     @PrePersist
     public void onCreate() {
         this.createdAt = LocalDateTime.now();
+    }
+
+    public boolean isAdmin() {
+        return admin;
+    }
+
+    public void setAdmin(boolean admin) {
+        this.admin = admin;
     }
 
     public Long getId() {

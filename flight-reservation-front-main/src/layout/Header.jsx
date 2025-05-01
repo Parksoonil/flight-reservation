@@ -7,6 +7,7 @@ function Header() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const isLoggedIn = useSelector((state) => state.auth.isLoggedIn);
+  const isAdmin = useSelector((state) => state.auth.user?.admin);
 
   const handleLogout = () => {
     dispatch(logout());
@@ -47,6 +48,11 @@ function Header() {
         <div className="header-buttons">
           {isLoggedIn ? (
               <>
+                  {isAdmin && (
+                      <button className="mypage-btn" onClick={() => navigate("/admin")}>
+                          관리자
+                      </button>
+                  )}
                 <button
                     className="mypage-btn"
                     onClick={() => navigate("/mypage")}

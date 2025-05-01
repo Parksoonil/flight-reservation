@@ -1,10 +1,11 @@
 import React from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
-import { useDispatch } from 'react-redux';
+import {useDispatch, useSelector} from 'react-redux';
 import { setFlight } from '../data/reservationSlice';
 import '../style/FlightDetail.css';
 
 function FlightDetail() {
+  const { accessToken } = useSelector((state) => state.auth);
   const { state } = useLocation();
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -21,6 +22,10 @@ function FlightDetail() {
     });
 
   const handleBookFlight = () => {
+    if (!accessToken) {
+      navigate("/login");
+      return;
+    }
     if (oneWayFlight) {
       dispatch(setFlight({ goFlight: oneWayFlight }));
     } else if (goFlight && backFlight) {

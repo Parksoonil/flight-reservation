@@ -10,4 +10,5 @@ public interface AuthService {
     Map<String, Object> login(LoginRequest loginRequest, HttpServletResponse response);
     String logout(HttpServletRequest request);
     String resolveToken(HttpServletRequest request);
+    String refreshAccessToken(String refreshToken);
 }

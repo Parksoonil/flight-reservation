@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import axios from "axios";
 import '../style/FlightList.css';
 import apiClient from "../apiClient.jsx";
+import {useSelector} from "react-redux";
 
 function FlightList({ filters, allFlights = [], onSelectedFlights }) {
     const [oneWayFlights, setOneWayFlights] = useState([]);
@@ -12,7 +12,7 @@ function FlightList({ filters, allFlights = [], onSelectedFlights }) {
     const [page, setPage] = useState(0);
     const [isBookingEnabled, setIsBookingEnabled] = useState(false); // 예매 버튼 활성화 상태
     const navigate = useNavigate();
-
+    const { accessToken } = useSelector((state) => state.auth);
     useEffect(() => {
         const fetchFlights = async () => {
             try {
@@ -113,6 +113,11 @@ function FlightList({ filters, allFlights = [], onSelectedFlights }) {
     };
 
     const handleBookingClick = () => {
+        if (!accessToken) {
+            alert("로그인을 해주세요.");
+            navigate("/login");
+            return;
+        }
         if (filters?.tripType === "round") {
             navigate("/loading", {
                 state: { goFlight: roundTripFlights.goList.find(flight => flight.id === selectedGoFlight), backFlight: roundTripFlights.backList.find(flight => flight.id === selectedBackFlight) }
