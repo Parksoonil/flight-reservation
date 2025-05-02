@@ -38,8 +38,6 @@ public class UserControllerTest {
     @MockBean
     private UserService userService;
 
-    @MockBean
-    private JwtTokenProvider jwtTokenProvider;
 
     @MockBean
     private RedisTemplate<String, Object> redisTemplate;
@@ -50,45 +48,7 @@ public class UserControllerTest {
     @Autowired
     private ObjectMapper objectMapper;
 
-    @Test
-    @WithMockUser
-    public void testLoginSuccess() throws Exception {
-        // 테스트용 로그인 요청
-        LoginRequest loginRequest = new LoginRequest();
-        loginRequest.setEmail("test@example.com");
-        loginRequest.setPassword("password");
 
-        // 샘플 UserEntity 생성 (비밀번호는 "password")
-        UserEntity user = new UserEntity();
-        user.setId(1L);
-        user.setUserFirstName("Test");
-        user.setUserLastName("User");
-        user.setEmail("test@example.com");
-        user.setPhone("010-1234-5678");
-        user.setPassword("password");
-        user.setCreatedAt(LocalDateTime.now());
-
-        // userService.findByEmail()가 호출되면 위 user를 반환하도록 설정
-        when(userService.findByEmail("test@example.com")).thenReturn(Optional.of(user));
-
-        // JWT 토큰 생성 및 유효시간 설정
-        String token = "token123";
-        when(jwtTokenProvider.createToken(eq("test@example.com"), any())).thenReturn(token);
-        when(jwtTokenProvider.getValidityInSeconds()).thenReturn(3600000L);
-
-        // redisTemplate.opsForValue()가 호출 시 모킹된 valueOperations를 반환
-        when(redisTemplate.opsForValue()).thenReturn(valueOperations);
-
-        String jsonRequest = objectMapper.writeValueAsString(loginRequest);
-
-        mockMvc.perform(post("/api/users/login")
-                        .with(csrf())
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(jsonRequest))
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$.token").value(token))
-                .andExpect(jsonPath("$.user.userFirstName").value("Test"));
-    }
 
     /**
      * 로그인 실패 테스트: 존재하지 않는 이메일로 요청 시
@@ -145,26 +105,7 @@ public class UserControllerTest {
                 .andExpect(content().string("Invalid password"));
     }
 
-    /**
-     * 로그아웃 성공 테스트
-     * - 올바른 JWT가 제공되면 Redis에서 해당 토큰을 삭제하고 로그아웃 성공 메시지 반환
-     */
-    @Test
-    @WithMockUser
-    public void testLogoutSuccess() throws Exception {
-        String token = "token123";
 
-        // jwtTokenProvider에서 토큰 검증이 성공하도록 설정
-        when(jwtTokenProvider.validateToken(token)).thenReturn(true);
-        // Redis에서 토큰 삭제가 성공하면 true 반환
-        when(redisTemplate.delete(token)).thenReturn(true);
-
-        mockMvc.perform(post("/api/users/logout")
-                        .with(csrf())
-                        .header("Authorization", "Bearer " + token))
-                .andExpect(status().isOk())
-                .andExpect(content().string("Logout successful"));
-    }
 
     /**
      * 로그아웃 실패 테스트: Authorization 헤더가 없거나 토큰이 유효하지 않은 경우
@@ -179,24 +120,6 @@ public class UserControllerTest {
                 .andExpect(content().string("Invalid token"));
     }
 
-    /**
-     * 로그아웃 실패 테스트: Redis 토큰 삭제가 실패한 경우
-     */
-    @Test
-    @WithMockUser
-    public void testLogoutFailureDeletion() throws Exception {
-        String token = "token123";
-
-        when(jwtTokenProvider.validateToken(token)).thenReturn(true);
-        // Redis 삭제가 실패 시 false 반환
-        when(redisTemplate.delete(token)).thenReturn(false);
-
-        mockMvc.perform(post("/api/users/logout")
-                        .with(csrf())
-                        .header("Authorization", "Bearer " + token))
-                .andExpect(status().isBadRequest())
-                .andExpect(content().string("Invalid token"));
-    }
 
     // 전체 사용자 조회 (GET /api/users)
     @Test

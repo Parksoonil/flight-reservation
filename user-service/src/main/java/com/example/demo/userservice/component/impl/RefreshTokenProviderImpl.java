@@ -25,7 +25,7 @@ public class RefreshTokenProviderImpl implements TokenProvider {
     }
 
     @Override
-    public String createToken(String email, List<String> roles) {
+    public String createToken(String email) {
         // refresh token은 일반적으로 최소한의 정보만 포함할 수 있습니다.
         Claims claims = Jwts.claims().setSubject(email);
         Date now = new Date();

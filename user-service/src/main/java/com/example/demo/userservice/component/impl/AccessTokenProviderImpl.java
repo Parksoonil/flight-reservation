@@ -25,7 +25,7 @@ public class AccessTokenProviderImpl implements TokenProvider {
     }
 
     @Override
-    public String createToken(String email, List<String> roles) {
+    public String createToken(String email) {
         // 액세스 토큰은 이메일과 함께 클레임에 역할(roles) 정보를 포함
         Claims claims = Jwts.claims().setSubject(email);
         userRepository.findByEmail(email).ifPresent(user -> {

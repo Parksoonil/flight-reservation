@@ -8,7 +8,7 @@ public interface TokenProvider {
     /**
      * 지정된 이메일과 역할 정보를 바탕으로 JWT를 생성합니다.
      */
-    String createToken(String email, List<String> roles);
+    String createToken(String email);
     /**
      * 토큰의 유효기간(밀리초 단위)을 반환합니다.
      */

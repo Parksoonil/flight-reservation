@@ -1,0 +1,30 @@
+/* FlightManagement.css */
+
+/* Container */
+.flight-management {
+    margin: 20px;
+    font-family: Arial, sans-serif;
+}
+
+/* Title */
+.flight-management__title {
+    font-size: 2em;
+    margin-bottom: 20px;
+}
+
+/* Table Styling */
+.flight-management__table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.flight-management__table-header-row {
+    background-color: #eee;
+}
+
+.flight-management__table th,
+.flight-management__table td {
+    border: 1px solid #ccc;
+    padding: 8px;
+    text-align: center;
+}

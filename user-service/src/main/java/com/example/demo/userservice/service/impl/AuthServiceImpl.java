@@ -48,12 +48,10 @@ public class AuthServiceImpl implements AuthService {
             throw new AuthException("Invalid password", HttpStatus.UNAUTHORIZED);
         }
 
-        // 사용자에게 할당할 권한 설정 (필요한 경우 로직 확장)
-        List<String> roles = Collections.singletonList("ROLE_USER");
 
         // 액세스, 리프래시 토큰 생성
-        String accessToken = accessTokenProvider.createToken(user.getEmail(), roles);
-        String refreshToken = refreshTokenProvider.createToken(user.getEmail(), roles);
+        String accessToken = accessTokenProvider.createToken(user.getEmail());
+        String refreshToken = refreshTokenProvider.createToken(user.getEmail());
         System.out.println("Access token: " + accessToken);
         System.out.println("Refresh token: " + refreshToken);
 
@@ -92,6 +90,7 @@ public class AuthServiceImpl implements AuthService {
         // Redis에서 토큰 삭제 (로그아웃 처리)
         Boolean deleted = redisTemplate.delete(token);
         if (Boolean.TRUE.equals(deleted)) {
+            System.out.println("Logout successful");
             return "Logout successful";
         } else {
             throw new AuthException("Invalid token", HttpStatus.BAD_REQUEST);
@@ -128,10 +127,7 @@ public class AuthServiceImpl implements AuthService {
         Claims claims = refreshTokenProvider.getClaimsFromToken(refreshToken);
         String email = claims.getSubject();
 
-        @SuppressWarnings("unchecked")
-        List<String> roles = (List<String>) claims.get("roles");
-
         // 새 액세스 토큰 생성 및 반환
-        return accessTokenProvider.createToken(email, roles);
+        return accessTokenProvider.createToken(email);
     }
 }

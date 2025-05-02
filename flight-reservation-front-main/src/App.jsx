@@ -26,10 +26,11 @@ import SeatConfirmationPage from "./pages/SeatConfirmationPage.jsx";
 import AdminPage from "./pages/AdminPage.jsx"
 import Home1 from "./pages/Home1.jsx";
 import {login, logout} from "./store/authSlice.js";
-import {useDispatch} from "react-redux";
+import {useDispatch, useSelector} from "react-redux";
 import {useEffect} from "react";
 import {jwtDecode} from "jwt-decode";
 import apiClient from "./apiClient.jsx";
+import ProtectedRoute from "./ProtectedRoute.jsx";
 
 
 function App() {
@@ -69,6 +70,15 @@ function App() {
       }
     }
   }, [dispatch]);
+
+  // Redux store에서 인증정보 가져오기
+  const { isLoggedIn, user } = useSelector((state) => state.auth);
+
+  // 로그인 여부 확인
+  const isAuthenticated = isLoggedIn;
+
+  // user.admin이 true일 경우 관리자로 간주합니다.
+  const isAdmin = user && user.admin === true;
   return (
     <div>
       {!hideLayout && <Header />}
@@ -90,7 +100,14 @@ function App() {
           <Route path="/select/:key" element={<SelectSeat/>}/>
           <Route path="/form/:key" element={<SeatInfoFormPage />} />
           <Route path="/confirm/:key" element={<SeatConfirmationPage />} />
-          <Route path="/admin" element={<AdminPage/>}/>
+          <Route
+              path="/admin"
+              element={
+                <ProtectedRoute isAuthenticated={isAuthenticated} isAdmin={isAdmin}>
+                  <AdminPage />
+                </ProtectedRoute>
+              }
+          />
         </Routes>
       </div>
 
