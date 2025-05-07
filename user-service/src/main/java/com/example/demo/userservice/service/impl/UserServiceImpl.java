@@ -1,5 +1,6 @@
 package com.example.demo.userservice.service.impl;
 
+import com.example.demo.userservice.dto.UserUpdateDTO;
 import com.example.demo.userservice.entity.UserEntity;
 import com.example.demo.userservice.repository.UserRepository;
 import com.example.demo.userservice.service.UserService;
@@ -36,21 +37,37 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public String findIdByPhone(String phone) {
+        return userRepository.findByPhone(phone)
+                .map(UserEntity::getEmail)
+                .orElse(null);
+    }
+
+    @Override
+    public boolean resetPassword(String email, String newPassword) {
+        Optional<UserEntity> optionalUser = userRepository.findByEmail(email);
+        if (optionalUser.isEmpty()) {
+            return false;
+        }
+        UserEntity user = optionalUser.get();
+        user.setPassword(newPassword);
+        userRepository.save(user);
+        return true;
+    }
+
+    @Override
     public UserEntity createUser(UserEntity user) {
         return userRepository.save(user);
     }
 
     @Override
-    public UserEntity updateUser(Long id, UserEntity userDetails) {
-        return userRepository.findById(id).map(user -> {
-            user.setUserFirstName(userDetails.getUserFirstName());
-            user.setUserLastName(userDetails.getUserLastName());
-            user.setEmail(userDetails.getEmail());
-            user.setPhone(userDetails.getPhone());
-            user.setBirthday(userDetails.getBirthday());
-            user.setAddress(userDetails.getAddress());
-            return userRepository.save(user);
-        }).orElseThrow(() -> new RuntimeException("User Not Found"));
+    public UserEntity updateUser(UserEntity user, UserUpdateDTO userDTO) {
+        user.setUserFirstName(userDTO.getUserFirstName());
+        user.setUserLastName(userDTO.getUserLastName());
+        user.setPhone(userDTO.getPhone());
+        user.setBirthday(userDTO.getBirthday());
+        user.setAddress(userDTO.getAddress());
+        return userRepository.save(user);
     }
 
     @Override

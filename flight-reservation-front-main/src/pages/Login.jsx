@@ -65,6 +65,9 @@ function Login() {
                 <button type="submit">로그인</button>
                 {error && <p className="error-message">{error}</p>}
             </form>
+            <p onClick={() => navigate("/findAccount")} className="signup-link">
+                아이디/비밀번호 찾기
+            </p>
             <p onClick={() => navigate("/signup")} className="signup-link">
                 계정이 없으신가요? 회원가입
             </p>

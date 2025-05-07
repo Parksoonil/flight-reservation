@@ -25,12 +25,16 @@ import SeatInfoFormPage from "./pages/SeatInfoFormPage.jsx";
 import SeatConfirmationPage from "./pages/SeatConfirmationPage.jsx";
 import AdminPage from "./pages/AdminPage.jsx"
 import Home1 from "./pages/Home1.jsx";
+import FindAccount from "./pages/FindAccount.jsx";
+
 import {login, logout} from "./store/authSlice.js";
 import {useDispatch, useSelector} from "react-redux";
 import {useEffect} from "react";
 import {jwtDecode} from "jwt-decode";
 import apiClient from "./apiClient.jsx";
 import ProtectedRoute from "./ProtectedRoute.jsx";
+import PublicRoute from "./store/PublicRoute.jsx";
+import EditProfile from "./pages/EditProfile.jsx";
 
 
 function App() {
@@ -86,8 +90,25 @@ function App() {
         <ScrollTop />
         <Routes>
           <Route path="/" element={<Home />} />
-          <Route path="/login" element={<Login />} />
-          <Route path="/signup" element={<Signup />} />
+          <Route path="/login"
+              element={
+                <PublicRoute>
+                  <Login />
+                </PublicRoute>
+              }/>
+          <Route path="/findAccount"
+              element={
+                <PublicRoute>
+                  <FindAccount />
+                </PublicRoute>
+              }/>
+          <Route path="/signup"
+              element={
+                <PublicRoute>
+                  <Signup />
+                </PublicRoute>
+              }/>
+          <Route path="/editProfile" element={<EditProfile />} />
           <Route path="/flight" element={<FlightPage />} />
           <Route path="/mypage" element={<MyPage />} />
           <Route path="/payment" element={<Payment />} />

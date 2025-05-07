@@ -1,9 +1,11 @@
 package com.example.demo.userservice.entity;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.persistence.*;
 import lombok.NoArgsConstructor;
 
 import java.io.Serializable;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Entity
@@ -31,7 +33,8 @@ public class UserEntity implements Serializable {
     private String phone;
 
     @Column
-    private Long birthday;
+    @JsonFormat(pattern = "yyyy-MM-dd")
+    private LocalDate birthday;
 
     @Column(name = "created_at")
     private LocalDateTime createdAt;
@@ -103,11 +106,11 @@ public class UserEntity implements Serializable {
         this.phone = phone;
     }
 
-    public Long getBirthday() {
+    public LocalDate getBirthday() {
         return birthday;
     }
 
-    public void setBirthday(Long birthday) {
+    public void setBirthday(LocalDate birthday) {
         this.birthday = birthday;
     }
 
@@ -127,7 +130,7 @@ public class UserEntity implements Serializable {
         this.createdAt = createdAt;
     }
 
-    public UserEntity(Long id, String userFirstName, String userLastName, String password, String email, String phone, Long birthday, LocalDateTime createdAt, String address) {
+    public UserEntity(Long id, String userFirstName, String userLastName, String password, String email, String phone, LocalDate birthday, LocalDateTime createdAt, String address) {
         this.id = id;
         this.userFirstName = userFirstName;
         this.userLastName = userLastName;

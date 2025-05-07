@@ -1,15 +1,14 @@
 package com.example.demo.userservice.controller;
 
+import com.example.demo.userservice.dto.UserUpdateDTO;
 import com.example.demo.userservice.entity.UserEntity;
 import com.example.demo.userservice.service.UserService;
-import org.springframework.boot.CommandLineRunner;
-import org.springframework.context.annotation.Bean;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
-import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 
 @PreAuthorize("hasRole('admin')")
 @RestController
@@ -45,13 +44,21 @@ public class AdminUserController {
     @PutMapping("/{id}")
     public ResponseEntity<UserEntity> updateUser(@PathVariable Long id, @RequestBody UserEntity user) {
         try {
-            UserEntity updatedUser = userService.updateUser(id, user);
+            UserUpdateDTO userDTO = new UserUpdateDTO();
+            userDTO.setUserLastName(user.getUserLastName());
+            userDTO.setUserFirstName(user.getUserFirstName());
+            userDTO.setPhone(user.getPhone());
+            userDTO.setBirthday(user.getBirthday());
+            userDTO.setAddress(user.getAddress());
+
+            Optional<UserEntity> user2 = userService.findById(id);
+
+            UserEntity updatedUser = userService.updateUser(user2.orElse(null), userDTO);
             return ResponseEntity.ok(updatedUser);
         } catch (RuntimeException e) {
             return ResponseEntity.notFound().build();
         }
     }
-
     // 사용자 삭제
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteUser(@PathVariable Long id) {

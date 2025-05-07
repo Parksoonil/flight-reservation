@@ -1,0 +1,113 @@
+/* 컨테이너 */
+.find-account-page {
+    max-width: 400px;
+    margin: 50px auto;
+    padding: 20px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    background-color: #f9f9f9;
+}
+
+/* 페이지 제목 */
+.find-account-page h2 {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+/* 모드 토글 버튼 영역 */
+.mode-toggle {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    margin-bottom: 20px;
+}
+
+.mode-toggle button {
+    padding: 8px 16px;
+    font-size: 14px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    background-color: #fff;
+    cursor: pointer;
+}
+
+.mode-toggle button.active {
+    background-color: rgb(85, 85, 255);
+    color: #fff;
+    border-color: rgb(85, 85, 255);
+}
+
+.mode-toggle button:hover {
+    background-color: rgb(65, 65, 230);
+    color: #fff;
+}
+
+/* 아이디 찾기 및 비밀번호 재설정 폼 */
+.find-id-form,
+.reset-password-form {
+    display: flex;
+    flex-direction: column;
+}
+
+.find-id-form div,
+.reset-password-form div {
+    margin-bottom: 15px;
+}
+
+.find-id-form label,
+.reset-password-form label {
+    font-size: 14px;
+    margin-bottom: 5px;
+}
+
+.find-id-form input,
+.reset-password-form input {
+    padding: 10px 0;
+    font-size: 16px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    width: 100%;
+}
+
+/* 전송 버튼 스타일 */
+.find-id-form button,
+.reset-password-form button {
+    padding: 10px;
+    background-color: rgb(85, 85, 255);
+    color: #fff;
+    font-size: 16px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.find-id-form button:hover,
+.reset-password-form button:hover {
+    background-color: rgb(65, 65, 230);
+}
+
+/* 에러 및 성공 메시지 */
+.error-message {
+    color: red;
+    font-size: 14px;
+    text-align: center;
+}
+
+.success-message {
+    color: green;
+    font-size: 14px;
+    text-align: center;
+    margin-top: 10px;
+}
+
+/* 로그인 페이지로 돌아가기 링크 */
+.back-to-login {
+    color: rgb(85, 85, 255);
+    cursor: pointer;
+    margin-top: 15px;
+    text-align: center;
+}
+
+.back-to-login:hover {
+    text-decoration: underline;
+}

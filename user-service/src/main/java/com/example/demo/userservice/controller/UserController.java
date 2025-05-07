@@ -1,8 +1,10 @@
 package com.example.demo.userservice.controller;
 
+import com.example.demo.userservice.dto.UserUpdateDTO;
 import com.example.demo.userservice.entity.UserEntity;
 import com.example.demo.userservice.service.UserService;
 import io.swagger.v3.oas.annotations.Operation;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -31,6 +33,44 @@ public class UserController {
         Optional<UserEntity> user = userService.findById(id);
         return ResponseEntity.ok(user.orElse(null));
     }
+    @PostMapping("/find-id")
+    public ResponseEntity<Map<String, String>> findId(@RequestBody Map<String, String> request) {
+        String phone = request.get("phone");
+
+        if (phone == null || phone.isEmpty()) {
+            return ResponseEntity.badRequest()
+                    .body(Collections.singletonMap("message", "핸드폰 번호를 입력해주세요."));
+        }
+
+        String foundId = userService.findIdByPhone(phone);
+        if (foundId == null) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body(Collections.singletonMap("message", "아이디를 찾을 수 없습니다."));
+        }
+
+        return ResponseEntity.ok(Collections.singletonMap("foundId", foundId));
+    }
+
+    @PostMapping("/reset-password")
+    public ResponseEntity<Map<String, String>> resetPassword(@RequestBody Map<String, String> request) {
+        String email = request.get("email");
+        String newPassword = request.get("newPassword");
+
+        if (email == null || email.isEmpty() || newPassword == null || newPassword.isEmpty()) {
+            return ResponseEntity.badRequest()
+                    .body(Collections.singletonMap("message", "이메일과 새 비밀번호를 입력해주세요."));
+        }
+
+        boolean success = userService.resetPassword(email, newPassword);
+
+        if (!success) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body(Collections.singletonMap("message", "등록된 사용자를 찾을 수 없습니다."));
+        }
+
+        return ResponseEntity.ok(Collections.singletonMap("message", "비밀번호 재설정에 성공했습니다."));
+    }
+
     @GetMapping("/email/{email}")
     @Operation(summary = "유저 이메일로 유저 찾기", description = "이메일로 검색된 유저를 가져옵니다.")
     public ResponseEntity<UserEntity> findByEmail(@PathVariable String email) {
@@ -46,9 +86,15 @@ public class UserController {
     }
 
     @PutMapping("/{id}")
-    @Operation(summary = "유저 수정", description = "ID에 해당하는 유저를 수정합니다.")
-    public ResponseEntity<UserEntity> update(@PathVariable Long id, @RequestBody UserEntity user) {
-        UserEntity updatedUser = userService.updateUser(id, user);
+    public ResponseEntity<?> updateUser(@PathVariable Long id, @RequestBody UserUpdateDTO userDTO) {
+        System.out.println(userDTO);
+        System.out.println(id);
+        Optional<UserEntity> existingUserOpt = userService.findById(id);
+        if (existingUserOpt.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body(Collections.singletonMap("message", "사용자를 찾을 수 없습니다."));
+        }
+        UserEntity updatedUser = userService.updateUser(existingUserOpt.get(), userDTO);
         return ResponseEntity.ok(updatedUser);
     }
 

@@ -176,12 +176,14 @@ const UserManagement = ({ users, setUsers }) => {
                             value={editingUser.phone}
                             onChange={handleFieldChange("phone")}
                             placeholder="Phone"
+                            maxLength="11"
+                            pattern="\d{11}"
                         />
                     </div>
                     <div className="user-management__form-group">
                         <label>생일</label>
                         <input
-                            type="text"
+                            type="date"
                             value={editingUser.birthday}
                             onChange={handleFieldChange("birthday")}
                             placeholder="Birthday"
