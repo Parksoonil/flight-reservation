@@ -39,7 +39,7 @@ function MyPage() {
         (async () => {
             try {
                 // 사용자 정보를 userid 기준으로 API 호출
-                const { data: userDataRaw } = await apiClient.get(`api/users?userId=${userid}`);
+                const { data: userDataRaw } = await apiClient.get(`api/users/id/${userid}`);
                 const userData = Array.isArray(userDataRaw) ? userDataRaw[0] : userDataRaw;
                 if (userData) {
                     setUser(userData);

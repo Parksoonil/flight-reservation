@@ -129,62 +129,6 @@ const UserManagement = ({ users, setUsers }) => {
                     초기화
                 </button>
             </div>
-
-            {/* 유저 목록 테이블 */}
-            {filteredUsers.length > 0 ? (
-                <table className="user-management__table">
-                    <thead>
-                    <tr className="user-management__table-header-row">
-                        <th className="user-management__table-header">아이디</th>
-                        <th className="user-management__table-header">First Name</th>
-                        <th className="user-management__table-header">Last Name</th>
-                        <th className="user-management__table-header">Email</th>
-                        <th className="user-management__table-header">비밀 번호</th>
-                        <th className="user-management__table-header">핸드폰 번호</th>
-                        <th className="user-management__table-header">생일</th>
-                        <th className="user-management__table-header">가입일</th>
-                        <th className="user-management__table-header">주소</th>
-                        <th className="user-management__table-header">Admin</th>
-                        <th className="user-management__table-header">수정/삭제</th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    {filteredUsers.map((user) => (
-                        <tr key={user.id}>
-                            <td className="user-management__table-cell">{user.id}</td>
-                            <td className="user-management__table-cell">{user.userFirstName}</td>
-                            <td className="user-management__table-cell">{user.userLastName}</td>
-                            <td className="user-management__table-cell">{user.email}</td>
-                            <td className="user-management__table-cell">{user.password}</td>
-                            <td className="user-management__table-cell">{user.phone}</td>
-                            <td className="user-management__table-cell">{user.birthday}</td>
-                            <td className="user-management__table-cell">{user.createdAt}</td>
-                            <td className="user-management__table-cell">{user.address}</td>
-                            <td className="user-management__table-cell">
-                                {user.admin ? "Yes" : "No"}
-                            </td>
-                            <td className="user-management__table-cell">
-                                <button
-                                    className="user-management__edit-btn"
-                                    onClick={() => setEditingUser(user)}
-                                >
-                                    수정
-                                </button>
-                                <button
-                                    className="user-management__delete-btn"
-                                    onClick={() => deleteUser(user.id)}
-                                >
-                                    삭제
-                                </button>
-                            </td>
-                        </tr>
-                    ))}
-                    </tbody>
-                </table>
-            ) : (
-                <div className="user-management__no-users">No Users Found</div>
-            )}
-
             {/* 수정 폼 (편집 창) */}
             {editingUser && (
                 <form className="user-management__edit-form" onSubmit={handleUpdateUser}>
@@ -283,6 +227,62 @@ const UserManagement = ({ users, setUsers }) => {
                     </div>
                 </form>
             )}
+            {/* 유저 목록 테이블 */}
+            {filteredUsers.length > 0 ? (
+                <table className="user-management__table">
+                    <thead>
+                    <tr className="user-management__table-header-row">
+                        <th className="user-management__table-header">아이디</th>
+                        <th className="user-management__table-header">First Name</th>
+                        <th className="user-management__table-header">Last Name</th>
+                        <th className="user-management__table-header">Email</th>
+                        <th className="user-management__table-header">비밀 번호</th>
+                        <th className="user-management__table-header">핸드폰 번호</th>
+                        <th className="user-management__table-header">생일</th>
+                        <th className="user-management__table-header">가입일</th>
+                        <th className="user-management__table-header">주소</th>
+                        <th className="user-management__table-header">Admin</th>
+                        <th className="user-management__table-header">수정/삭제</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {filteredUsers.map((user) => (
+                        <tr key={user.id}>
+                            <td className="user-management__table-cell">{user.id}</td>
+                            <td className="user-management__table-cell">{user.userFirstName}</td>
+                            <td className="user-management__table-cell">{user.userLastName}</td>
+                            <td className="user-management__table-cell">{user.email}</td>
+                            <td className="user-management__table-cell">{user.password}</td>
+                            <td className="user-management__table-cell">{user.phone}</td>
+                            <td className="user-management__table-cell">{user.birthday}</td>
+                            <td className="user-management__table-cell">{user.createdAt}</td>
+                            <td className="user-management__table-cell">{user.address}</td>
+                            <td className="user-management__table-cell">
+                                {user.admin ? "Yes" : "No"}
+                            </td>
+                            <td className="user-management__table-cell">
+                                <button
+                                    className="user-management__edit-btn"
+                                    onClick={() => setEditingUser(user)}
+                                >
+                                    수정
+                                </button>
+                                <button
+                                    className="user-management__delete-btn"
+                                    onClick={() => deleteUser(user.id)}
+                                >
+                                    삭제
+                                </button>
+                            </td>
+                        </tr>
+                    ))}
+                    </tbody>
+                </table>
+            ) : (
+                <div className="user-management__no-users">No Users Found</div>
+            )}
+
+
         </div>
     );
 };

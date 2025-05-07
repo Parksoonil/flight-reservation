@@ -2,10 +2,13 @@ package com.example.demo.userservice.controller;
 
 import com.example.demo.userservice.entity.UserEntity;
 import com.example.demo.userservice.service.UserService;
+import org.springframework.boot.CommandLineRunner;
+import org.springframework.context.annotation.Bean;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @PreAuthorize("hasRole('admin')")
@@ -18,7 +21,6 @@ public class AdminUserController {
     public AdminUserController(UserService userService) {
         this.userService = userService;
     }
-
     // 모든 사용자 조회
     @GetMapping
     public List<UserEntity> findAll() {

@@ -25,15 +25,15 @@ public class UserController {
         return ResponseEntity.ok(users);
     }
 
-    @GetMapping("/{id}")
+    @GetMapping("/id/{id}")
     @Operation(summary = "유저 ID로 유저 검색", description = "ID로 검색된 유저를 가져옵니다.")
     public ResponseEntity<UserEntity> findById(@PathVariable Long id) {
         Optional<UserEntity> user = userService.findById(id);
         return ResponseEntity.ok(user.orElse(null));
     }
-    @GetMapping("/{email}")
+    @GetMapping("/email/{email}")
     @Operation(summary = "유저 이메일로 유저 찾기", description = "이메일로 검색된 유저를 가져옵니다.")
-    public ResponseEntity<UserEntity> findById(@PathVariable String email) {
+    public ResponseEntity<UserEntity> findByEmail(@PathVariable String email) {
         Optional<UserEntity> user = userService.findByEmail(email);
         return ResponseEntity.ok(user.orElse(null));
     }
