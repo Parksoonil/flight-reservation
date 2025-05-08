@@ -8,7 +8,7 @@ import java.util.Map;
 
 public interface AuthService {
     Map<String, Object> login(LoginRequest loginRequest, HttpServletResponse response);
-    String logout(HttpServletRequest request);
+    String logout(HttpServletRequest request, HttpServletResponse response);
     String resolveToken(HttpServletRequest request);
     String refreshAccessToken(String refreshToken);
 }

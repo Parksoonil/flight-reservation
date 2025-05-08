@@ -1,96 +1,114 @@
 import { useState } from "react";
-import { useNavigate } from 'react-router-dom';
-import "../style/SearchFlight.css";
+import "./SearchFlight.css";
+import AirportSelectModal from "./AirportSelectModal.jsx";
 
-const SearchFlight = () => {
-  const navigate = useNavigate();
+const SearchFlight = ({ onSearch }) => {
+  const [isDepartureModalOpen, setIsDepartureModalOpen] = useState(false);
+  const [isArrivalModalOpen, setIsArrivalModalOpen] = useState(false);
+
   const [tripType, setTripType] = useState("round");
-  const [departure, setDeparture] = useState("");
-  const [arrival, setArrival] = useState("");
+  const [departure, setDeparture] = useState({ name: "인천", code: "ICN" });
+  const [arrival, setArrival] = useState({ name: "김포", code: "GMP" });
+  const [arrivalCode , setArrivalCode] = useState("GMP");
   const [date, setDate] = useState("");
   const [returnDate, setReturnDate] = useState("");
 
   const handleSearch = () => {
     if (!departure || !arrival) {
-      alert("출발 , 도착을 입력해라");
+      alert("출발지와 도착지를 선택하세요.");
       return;
     }
-    const searchData = { tripType, departure, arrival, date, returnDate };
-    navigate('/flight', { state: searchData });
+    onSearch({
+      tripType,
+      departure: departure.name,
+      arrival: arrival.name,
+      departureCode: departure.code,
+      arrivalCode: arrival.code,
+      date,
+      returnDate
+    });
   };
 
   const handleSwap = () => {
+    const temp = departure;
     setDeparture(arrival);
-    setArrival(departure);
-  };
-
-  const handleReset = () => {
-    setDeparture("");
-    setArrival("");
-    setDate("");
-    setReturnDate("");
-    setTripType("round");
+    setArrival(temp);
   };
 
   return (
-    <div className="flight-search-box">
-      <div className="top-section">
+      <div className="flight-search-box">
         <div className="trip-tabs">
           <button
-            className={tripType === "round" ? "active" : ""}
-            onClick={() => setTripType("round")}
+              className={tripType === "round" ? "active" : ""}
+              onClick={() => setTripType("round")}
           >
             왕복
           </button>
           <button
-            className={tripType === "oneway" ? "active" : ""}
-            onClick={() => setTripType("oneway")}
+              className={tripType === "oneway" ? "active" : ""}
+              onClick={() => setTripType("oneway")}
           >
             편도
           </button>
-        </div>
-        <button className="reset-btn" onClick={handleReset}>↻</button>
-      </div>
-
-      <div className="middle-section">
-        <div className="middle-left">
-          <input
-            type="text"
-            placeholder="출발지 (예: 김포)"
-            value={departure}
-            onChange={(e) => setDeparture(e.target.value)}
-          />
-          <button type="button" className="swap-btn" onClick={handleSwap}>
-            ⇄
-          </button>
-          <input
-            type="text"
-            placeholder="도착지 (예: 제주)"
-            value={arrival}
-            onChange={(e) => setArrival(e.target.value)}
-          />
+          <h2 style={{ marginLeft: "275px" }}>항공권 검색</h2>
         </div>
 
-        <div className="middle-center">
-          <input
-            type="date"
-            value={date}
-            onChange={(e) => setDate(e.target.value)}
-          />
-          {tripType === "round" && (
-            <input
-              type="date"
-              value={returnDate}
-              onChange={(e) => setReturnDate(e.target.value)}
-            />
+        <div className="form-row">
+          <div className="form-row select-boxes">
+            <div className="airport-box" onClick={() => setIsDepartureModalOpen(true)}>
+              <div className="airport-label">{departure.name}</div>
+              <div className="airport-code">{departure.code} <span>▼</span></div>
+            </div>
+            <button type="button" onClick={handleSwap}>⇄</button>
+            <div className="airport-box" onClick={() => setIsArrivalModalOpen(true)}>
+              <div className="airporrnt-label">{arrival.name}</div>
+              <div className="airport-code">{arrival.code} <span>▼</span></div>
+            </div>
+          </div>
+
+
+          {isDepartureModalOpen && (
+              <AirportSelectModal
+                  onClose={() => setIsDepartureModalOpen(false)}
+                  onSelect={(airport) =>{ setDeparture(airport) } }
+              />
           )}
-        </div>
-      </div>
 
-      <div className="bottom-section">
-        <button className="search-btn" onClick={handleSearch}>검색</button>
+          {isArrivalModalOpen && (
+              <AirportSelectModal
+                  onClose={() => setIsArrivalModalOpen(false)}
+                  onSelect={(airport) => setArrival(airport)}
+              />
+          )}
+
+
+
+          <div className="form-row">
+            <input
+                type="date"
+                value={date}
+                onChange={(e) => setDate(e.target.value)}
+            />
+          </div>
+
+          {tripType === "round" && (
+              <div className="form-row">
+                <input
+                    type="date"
+                    value={returnDate}
+                    onChange={(e) => setReturnDate(e.target.value)}
+                />
+              </div>
+          )}
+
+          <div className="form-row">
+            <button className="search-btn" onClick={handleSearch}>
+              검색
+            </button>
+          </div>
+        </div>
+
       </div>
-    </div>
   );
 };
 

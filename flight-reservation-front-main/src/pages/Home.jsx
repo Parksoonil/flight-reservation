@@ -1,38 +1,58 @@
 import SearchFlight from "../components/SearchFlight";
-import AdBanner from "../components/AdBanner";
+import AdBanner from '../components/AdBanner';
 
-import "../style/Home.css";
+import '../style/Home.css';
 import QuickLink from "../components/QuickLink";
 import Hotplace from "../components/Hotplace";
-import SimpleAirportMap from "../components/SimpleAirportMap";
-import WeatherForecast from "../components/WeatherForecast";
-import Boards from "../components/Boards";
+import SimpleAirportMap from "../components/SimpleAirportMap.jsx";
+import {useState} from "react";
+import GoogleMap from "../components/GoogleMap.jsx";
+import WeatherForecast from "../components/WeatherForecast.jsx";
+import Boards from "../components/Boards.jsx";
 
 function Home() {
-  const scrollToTop = () => {
-    window.scrollTo({ top: 0, behavior: "smooth" });
-  };
+    const [flightType,setFlightType] = useState("domestic"); //국내선 기본
 
-  return (
-    <div className="home">
-      <div className="banner">
-        <img src="/images/img1.jpg" alt="Banner Image" />
-      </div>
+    return (
+        <div className="home">
+            <div className="banner">
+                <img
+                    src="/images/img1.jpg"
+                    alt="Banner Image"
+                />
+            </div>
 
-      <div className="contents-box">
-        <SearchFlight />
-        <QuickLink />
-        <SimpleAirportMap />
-        <AdBanner />
-        <Hotplace />
-        <WeatherForecast />
-        <Boards />
-      </div>
-      <div className="scroll-to-top" onClick={scrollToTop}>
-      <p>↑ 페이지 상단으로 이동</p>
-      </div>
-    </div>
-  );
+            <div className="contents-box">
+                <SearchFlight />
+                <div className="flight-type-tabs">
+                    <button
+                        className={flightType === "domestic" ? "active" : ""}
+                        onClick={() => setFlightType("domestic")}
+                    >
+                        국내선
+                    </button>
+                    <button
+                        className={flightType === "international" ? "active" : ""}
+                        onClick={() => setFlightType("international")}
+                    >
+                        국제선
+                    </button>
+                </div>
+
+                {/* 지도 전환 */}
+                {flightType === "domestic" ? (
+                    <SimpleAirportMap />
+                ) : (
+                    <GoogleMap />
+                )}
+                <QuickLink />
+                <AdBanner />
+                <Hotplace />
+                <WeatherForecast />
+                <Boards />
+            </div>
+        </div>
+    )
 }
 
 export default Home;

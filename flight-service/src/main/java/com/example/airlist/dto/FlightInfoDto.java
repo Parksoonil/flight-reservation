@@ -19,5 +19,4 @@ public class FlightInfoDto {
     private LocalDateTime arrivalTime;
     private String aircraftType;
     private int seatCount;
-    private String flightClass;
 }

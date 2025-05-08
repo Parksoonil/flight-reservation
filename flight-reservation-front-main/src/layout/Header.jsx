@@ -2,6 +2,7 @@ import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import "./Header.css";
 import { logout } from "../store/authSlice";
+import apiClient from "../apiClient.jsx";
 
 function Header() {
   const navigate = useNavigate();
@@ -9,10 +10,31 @@ function Header() {
   const isLoggedIn = useSelector((state) => state.auth.isLoggedIn);
   const isAdmin = useSelector((state) => state.auth.user?.admin);
 
-  const handleLogout = () => {
-    dispatch(logout());
-    navigate("/");
-  };
+    const handleLogout = async () => {
+        try {
+            // 로컬 스토리지나 Redux에서 accessToken 가져오기 (예시)
+            const accessToken = localStorage.getItem("accessToken");
+            // 또는 Redux 상태에서 가져온다면: const { accessToken } = useSelector((state) => state.auth);
+
+            // 백엔드 로그아웃 엔드포인트 호출시 올바른 Authorization 헤더 추가
+            await apiClient.post(
+                "/api/users/logout", // 백엔드 매핑 경로에 맞춰주세요.
+                {},
+                {
+                    headers: {
+                        Authorization: `Bearer ${accessToken}`,
+                    },
+                }
+            );
+            // 클라이언트 측 Redux 로그아웃 처리
+            dispatch(logout());
+            // 홈페이지로 이동
+            navigate("/");
+        } catch (error) {
+            console.error("로그아웃에 실패했습니다:", error);
+            alert("로그아웃에 실패했습니다. 다시 시도해주세요.");
+        }
+    };
 
 
 

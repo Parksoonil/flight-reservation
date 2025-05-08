@@ -48,4 +48,7 @@ public class ReservationDTO {
 
     @JsonProperty("uName")
     private String uName;
+
+    @JsonProperty("totalPrice")
+    private int totalPrice;
 }

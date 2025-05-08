@@ -96,7 +96,7 @@
   /* 다음, 취소 버튼 공통 */
 .buttonGroup {
   position: absolute;
-  bottom: 20px;
+  bottom: 125px;
   right: 20px;
   display: flex;
   gap: 10px;

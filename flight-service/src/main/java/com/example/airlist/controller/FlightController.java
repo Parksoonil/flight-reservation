@@ -1,11 +1,15 @@
 package com.example.airlist.controller;
 
 import com.example.airlist.dto.FlightInfoDto;
-import com.example.airlist.entity.Flight_info;
-import com.example.airlist.repository.FlightInfoRepository;
+import com.example.airlist.entity.FlightDocument;
+import com.example.airlist.service.FlightSearchElastic;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
@@ -15,31 +19,41 @@ import java.util.List;
 @RequestMapping("/api/flights")
 public class FlightController {
 
-    private final FlightInfoRepository flightInfoRepository;
 
-    public FlightController(FlightInfoRepository flightInfoRepository) {
-        this.flightInfoRepository = flightInfoRepository;
+    private final FlightSearchElastic flightSearchService;
+
+    public FlightController(FlightSearchElastic flightSearchService) {
+        this.flightSearchService = flightSearchService;
     }
 
     @GetMapping
-    public ResponseEntity<List<FlightInfoDto>> getAllFlights() {
-        List<Flight_info> entities = flightInfoRepository.findAll();
+    public ResponseEntity<?> getAllFlights(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size
+    ) {
+        if (size < 1) size = 10;
 
-        List<FlightInfoDto> dtoList = entities.stream().map(e -> new FlightInfoDto(
-                e.getId(),
-                e.getDeparture().getANameKor(),
-                e.getArrival().getANameKor(),
-                e.getDepartureTime(),
-                e.getArrivalTime(),
-                e.getAircraft().getCModel(),
-                e.getSeatCount(),
-                e.getFlightClass()
-        )).toList();
+        Pageable pageable = PageRequest.of(page, size);
+        Page<FlightDocument> result = flightSearchService.findAllPaged(pageable);
 
-        return ResponseEntity.ok(dtoList);
+        List<FlightInfoDto> dtoList = result.map(doc -> new FlightInfoDto(
+                doc.getId(),
+                doc.getDepartureName(),
+                doc.getArrivalName(),
+                doc.getDepartureTime(),
+                doc.getArrivalTime(),
+                doc.getAircraftModel(),
+                doc.getSeatCount()
+        )).getContent(); //res.data.content 부분만되게
+
+
+        return ResponseEntity.ok(dtoList);  // 👈 배열만 응답
     }
 
 
-
 }
+
+
+
+
 

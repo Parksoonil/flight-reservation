@@ -26,6 +26,7 @@ import SeatConfirmationPage from "./pages/SeatConfirmationPage.jsx";
 import AdminPage from "./pages/AdminPage.jsx"
 import Home1 from "./pages/Home1.jsx";
 import FindAccount from "./pages/FindAccount.jsx";
+import ReservationComplete from "./pages/ReservationComplete.jsx"
 
 import {login, logout} from "./store/authSlice.js";
 import {useDispatch, useSelector} from "react-redux";
@@ -121,6 +122,7 @@ function App() {
           <Route path="/select/:key" element={<SelectSeat/>}/>
           <Route path="/form/:key" element={<SeatInfoFormPage />} />
           <Route path="/confirm/:key" element={<SeatConfirmationPage />} />
+          <Route path="complete" element={<ReservationComplete/>} />
           <Route
               path="/admin"
               element={

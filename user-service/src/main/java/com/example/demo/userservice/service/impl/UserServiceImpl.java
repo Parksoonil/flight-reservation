@@ -4,8 +4,10 @@ import com.example.demo.userservice.dto.UserUpdateDTO;
 import com.example.demo.userservice.entity.UserEntity;
 import com.example.demo.userservice.repository.UserRepository;
 import com.example.demo.userservice.service.UserService;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -19,6 +21,11 @@ public class UserServiceImpl implements UserService {
     @Override
     public List<UserEntity> findAll() {
         return userRepository.findAll();
+    }
+
+    @Override
+    public List<UserEntity> findUserByIdIncludeDeleted() {
+        return userRepository.findUserByIdIncludeDeleted();
     }
 
     @Override
@@ -76,5 +83,18 @@ public class UserServiceImpl implements UserService {
             userRepository.delete(user);
             return true;
         }).orElse(false);
+    }
+
+    @Override
+    @Scheduled(cron = "0 0 0 * * ?")
+    public void scheduleHardDelete() {
+        // 현재 시간에서 한 달 전 날짜를 기준으로 설정
+        LocalDateTime cutoffDate = LocalDateTime.now().minusMonths(1);
+
+        // 실제 삭제를 진행
+        int deletedCount = userRepository.hardDeleteByDeletedBefore(cutoffDate);
+
+        // 로그 출력 (적절한 로그 라이브러리 사용)
+        System.out.println("하드 딜리트 완료 - 삭제된 사용자 수: " + deletedCount);
     }
 }

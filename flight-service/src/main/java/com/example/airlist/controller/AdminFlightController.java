@@ -33,13 +33,12 @@ public class AdminFlightController {
 
         List<FlightInfoDto> dtoList = entities.stream().map(e -> new FlightInfoDto(
                 e.getId(),
-                e.getDeparture().getANameKor(),
-                e.getArrival().getANameKor(),
+                e.getDeparture().getNameKorean(),
+                e.getArrival().getNameKorean(),
                 e.getDepartureTime(),
                 e.getArrivalTime(),
                 e.getAircraft().getCModel(),
-                e.getSeatCount(),
-                e.getFlightClass()
+                e.getSeatCount()
         )).toList();
 
         return ResponseEntity.ok(dtoList);

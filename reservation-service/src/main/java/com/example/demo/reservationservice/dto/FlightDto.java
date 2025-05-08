@@ -1,6 +1,7 @@
 package com.example.demo.reservationservice.dto;
 
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -9,6 +10,7 @@ import java.time.LocalDateTime;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
+@Builder
 public class FlightDto {
 
     private Long id;
@@ -17,9 +19,9 @@ public class FlightDto {
 
     private String arrivalName;
 
-    private String departureTime;
+    private LocalDateTime departureTime;
 
-    private String arrivalTime;
+    private LocalDateTime arrivalTime;
 
     private String aircraftType;
 

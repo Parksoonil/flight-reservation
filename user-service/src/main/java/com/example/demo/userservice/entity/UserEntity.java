@@ -3,6 +3,10 @@ package com.example.demo.userservice.entity;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.persistence.*;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.Filter;
+import org.hibernate.annotations.FilterDef;
+import org.hibernate.annotations.SQLDelete;
+import org.hibernate.annotations.Where;
 
 import java.io.Serializable;
 import java.time.LocalDate;
@@ -10,6 +14,9 @@ import java.time.LocalDateTime;
 
 @Entity
 @Table(name="users")
+@SQLDelete(sql = "UPDATE users SET deleted_at = CURRENT_TIMESTAMP WHERE id = ?")
+@FilterDef(name = "deletedFilter")
+@Filter(name = "deletedFilter", condition = "deleted_at IS NULL")
 @NoArgsConstructor
 public class UserEntity implements Serializable {
 
@@ -42,12 +49,23 @@ public class UserEntity implements Serializable {
     @Column
     private String address;
 
+    @Column(name = "deleted_at")
+    private LocalDateTime deletedAt;
+
     @Column(nullable = false, columnDefinition = "boolean default false")
     private boolean admin;
 
     @PrePersist
     public void onCreate() {
         this.createdAt = LocalDateTime.now();
+    }
+
+    public LocalDateTime getDeletedAt() {
+        return deletedAt;
+    }
+
+    public void setDeletedAt(LocalDateTime deletedAt) {
+        this.deletedAt = deletedAt;
     }
 
     public boolean isAdmin() {

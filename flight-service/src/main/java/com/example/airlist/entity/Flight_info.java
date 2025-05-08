@@ -42,7 +42,4 @@ public class Flight_info {
 
     @Column(name = "f_seat", nullable = false)
     private int seatCount;
-
-    @Column(name = "f_class", nullable = false)
-    private String flightClass;
 }

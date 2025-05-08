@@ -29,14 +29,24 @@
     margin-bottom: 10vh;
 }
 
-.scroll-to-top {
+.flight-type-tabs {
     display: flex;
     justify-content: center;
-    margin-top: 10vh;
-    padding: 10px 20px;
-    cursor: pointer;
+    margin: 1.5rem 0;
+    gap: 1rem;
 }
 
-.scroll-to-top:hover {
-    background-color: #f2f2f2;
+.flight-type-tabs button {
+    padding: 0.6rem 1.2rem;
+    border-radius: 999px;
+    border: none;
+    font-weight: bold;
+    background-color: #e5e7eb;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.flight-type-tabs button.active {
+    background-color: #2563eb;
+    color: white;
 }

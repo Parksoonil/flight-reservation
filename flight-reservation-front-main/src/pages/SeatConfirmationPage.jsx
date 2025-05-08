@@ -3,11 +3,13 @@ import { useParams } from 'react-router-dom';
 import axios from 'axios';
 import styles from '../style/SeatConfirmationPage.module.css';
 import apiClient from "../apiClient.jsx";
+import { useNavigate } from 'react-router-dom';
 
 function SeatConfirmationPage() {
     const { key } = useParams();
     const [reservation, setReservation] = useState(null);
     const [seats, setSeats] = useState([]);
+    const navigate = useNavigate();
 
     useEffect(() => {
         apiClient.get('/api/reservations/search', { params: { key } })
@@ -33,12 +35,11 @@ function SeatConfirmationPage() {
 
       const handleNext = async () => {
         try {
-            await apiClient.post(
-                '/api/reservations/confirm',
-                seats, // 리스트 형태로 seats 전송
-                { params: { key } } // key는 쿼리 파라미터로 전달
-            );
-            alert("성공");
+            await apiClient.post('/api/reservations/confirm', seats, { params: { key } });
+    
+            // ✅ 팝업 없이 페이지 이동
+            navigate(`/complete`);
+    
         } catch (err) {
             console.error("좌석 정보 저장 실패:", err);
             alert("좌석 정보 저장 중 오류가 발생했습니다.");

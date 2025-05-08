@@ -19,17 +19,17 @@ function QuickLink() {
         },
         {
             id: 2,
-            title: "추천 관광지",
-            item: "지역별 인기 관광지 확인하기",
+            title: "인기 여행지",
+            item: "인기 여행지 확인하기",
             image: "🏞️",
-            link: "/rplace"
+            link: "/"
         },
         {
             id: 3,
             title: "항공권 혜택",
             item: "특별 할인 혜택 확인하기",
             image: "🎁",
-            link: "/board"
+            link: "/"
         },
         {
             id: 4,

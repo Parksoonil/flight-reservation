@@ -242,6 +242,7 @@ const UserManagement = ({ users, setUsers }) => {
                         <th className="user-management__table-header">핸드폰 번호</th>
                         <th className="user-management__table-header">생일</th>
                         <th className="user-management__table-header">가입일</th>
+                        <th className="user-management__table-header">삭제일</th>
                         <th className="user-management__table-header">주소</th>
                         <th className="user-management__table-header">Admin</th>
                         <th className="user-management__table-header">수정/삭제</th>
@@ -258,6 +259,9 @@ const UserManagement = ({ users, setUsers }) => {
                             <td className="user-management__table-cell">{user.phone}</td>
                             <td className="user-management__table-cell">{user.birthday}</td>
                             <td className="user-management__table-cell">{user.createdAt}</td>
+                            <td className="user-management__table-cell">
+                                {user.deletedAt ? user.deletedAt : "활성"}
+                            </td>
                             <td className="user-management__table-cell">{user.address}</td>
                             <td className="user-management__table-cell">
                                 {user.admin ? "Yes" : "No"}

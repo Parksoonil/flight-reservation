@@ -29,9 +29,9 @@ public class AuthServiceImpl implements AuthService {
     private final RedisTemplate<String, Object> redisTemplate;
 
     public AuthServiceImpl(UserService userService,
-                       @Qualifier("accessTokenProvider") TokenProvider accessTokenProvider,
-                       @Qualifier("refreshTokenProvider") TokenProvider refreshTokenProvider,
-                       RedisTemplate<String, Object> redisTemplate) {
+                           @Qualifier("accessTokenProvider") TokenProvider accessTokenProvider,
+                           @Qualifier("refreshTokenProvider") TokenProvider refreshTokenProvider,
+                           RedisTemplate<String, Object> redisTemplate) {
         this.userService = userService;
         this.accessTokenProvider = accessTokenProvider;
         this.refreshTokenProvider = refreshTokenProvider;
@@ -80,21 +80,44 @@ public class AuthServiceImpl implements AuthService {
         return responseBody;
     }
 
-    public String logout(HttpServletRequest request) {
-        // Authorization 헤더에서 Bearer 토큰 추출
-        String token = resolveToken(request);
-        if (token == null || !accessTokenProvider.validateToken(token)) {
+    public String logout(HttpServletRequest request, HttpServletResponse response) {
+        // 1. Authorization 헤더에서 Bearer 토큰 추출
+        String accessToken = resolveToken(request);
+        System.out.println("Access token: " + accessToken);
+        if (accessToken == null || !accessTokenProvider.validateToken(accessToken)) {
             throw new AuthException("Invalid token", HttpStatus.BAD_REQUEST);
         }
+        System.out.println(accessToken);
+        // 2. Redis에서 액세스 및 refresh 토큰 삭제
+        Boolean accessDeleted = redisTemplate.delete(accessToken);
+        Boolean refreshDeleted = redisTemplate.delete(getRefreshTokenFromCookies(request));
+        System.out.println("Access deleted: " + accessDeleted);
+        System.out.println("Refresh deleted: " + refreshDeleted);
+        if (Boolean.TRUE.equals(accessDeleted) && Boolean.TRUE.equals(refreshDeleted)) {
+            // 3. HTTP 요청의 쿠키에서 refreshToken 쿠키 삭제 처리
+            Cookie refreshTokenCookie = new Cookie("refreshToken", "");
+            refreshTokenCookie.setPath("/");
+            refreshTokenCookie.setMaxAge(0);
+            response.addCookie(refreshTokenCookie);
 
-        // Redis에서 토큰 삭제 (로그아웃 처리)
-        Boolean deleted = redisTemplate.delete(token);
-        if (Boolean.TRUE.equals(deleted)) {
-            System.out.println("Logout successful");
             return "Logout successful";
         } else {
             throw new AuthException("Invalid token", HttpStatus.BAD_REQUEST);
         }
+    }
+
+    private String getRefreshTokenFromCookies(HttpServletRequest request) {
+        Cookie[] cookies = request.getCookies();
+        System.out.println(cookies);
+        if (cookies != null) {
+            for (Cookie cookie : cookies) {
+                System.out.println(cookie);
+                if ("refreshToken".equals(cookie.getName())) {
+                    return cookie.getValue();
+                }
+            }
+        }
+        return null;
     }
 
     // Authorization 헤더에서 토큰 정보 추출 (Bearer 토큰)
@@ -127,7 +150,17 @@ public class AuthServiceImpl implements AuthService {
         Claims claims = refreshTokenProvider.getClaimsFromToken(refreshToken);
         String email = claims.getSubject();
 
+        Optional<UserEntity> userOptional = userService.findByEmail(email);
+        if (userOptional.isEmpty()) {
+            throw new AuthException("Invalid email", HttpStatus.UNAUTHORIZED);
+        }
+
+        String accessToken = accessTokenProvider.createToken(email);
+        ValueOperations<String, Object> ops = redisTemplate.opsForValue();
+        UserEntity user = userOptional.get();
+
+        ops.set(accessToken, user, accessTokenProvider.getValidityInMillis(), TimeUnit.MILLISECONDS);
         // 새 액세스 토큰 생성 및 반환
-        return accessTokenProvider.createToken(email);
+        return accessToken;
     }
 }

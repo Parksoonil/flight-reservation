@@ -8,6 +8,7 @@ import java.util.Optional;
 
 public interface UserService {
     List<UserEntity> findAll();
+    List<UserEntity> findUserByIdIncludeDeleted();
     Optional<UserEntity> findById(Long id);
     String findIdByPhone(String phone);
     Optional<UserEntity> findByEmail(String email);
@@ -16,4 +17,5 @@ public interface UserService {
     UserEntity updateUser(UserEntity user, UserUpdateDTO userDTO);
     boolean deleteUser(Long id);
     boolean resetPassword(String email, String newPassword);
+    void scheduleHardDelete();
 }

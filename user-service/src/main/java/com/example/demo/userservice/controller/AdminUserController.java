@@ -23,7 +23,7 @@ public class AdminUserController {
     // 모든 사용자 조회
     @GetMapping
     public List<UserEntity> findAll() {
-        return userService.findAll();
+        return userService.findUserByIdIncludeDeleted();
     }
 
     // 특정 사용자 조회

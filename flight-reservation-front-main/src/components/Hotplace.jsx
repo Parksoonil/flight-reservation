@@ -21,22 +21,22 @@ function Hotplace() {
   };
 
   const handleLoadMoreClick = () => {
-    navigate('/splace'); 
+    navigate('/splace');
   };
 
   return (
-    <div>
-      <h1>추천 관광지</h1>
-      <div className="image-list">
-        {places.map(place => (
-          <div key={place.id} className="image-item" onClick={() => handleItemClick(place.tag)}>
-            <img src={place.image} alt="여행지 이미지" className="place-image" />
-            <div className="tag">#{place.tag}</div>
-          </div>
-        ))}
+      <div>
+        <h1>추천 관광지</h1>
+        <div className="image-list">
+          {places.map(place => (
+              <div key={place.id} className="image-item" onClick={() => handleItemClick(place.tag)}>
+                <img src={place.image} alt="여행지 이미지" className="place-image" />
+                <div className="tag">#{place.tag}</div>
+              </div>
+          ))}
+        </div>
+        <button className="load-more" onClick={handleLoadMoreClick}>더보기</button>
       </div>
-      <button className="load-more" onClick={handleLoadMoreClick}>더보기</button>
-    </div>
   );
 }
 

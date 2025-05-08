@@ -17,19 +17,12 @@ function ReservationPage() {
         setError(null); // 에러 초기화
 
         try {
-            const response = await apiClient.post("/api/reservations/", {
-                rId: 1,
-                fId: 2,
-                uId: 3,
-                fDeparture: "인천",
-                fArrival: "제주",
-                fDepartureTime: "2025-05-08T05:30",
-                fArrivalTime: "2025-05-08T15:30",
-                cId: 4,
-                fSeatCount: 250,
-                fAircraftType: "아시아나항공",
-                uName: "첫길동"
-            });
+            const response = await apiClient.post("/api/reservations/", null, {
+                params: {
+                    uId: 3,
+                    uName: "첫길동"
+                }
+            });        
             
             const receivedKey = response.data; // 서버로부터 받은 키
             console.log("Received Key:", receivedKey);

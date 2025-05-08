@@ -33,9 +33,9 @@ public class AuthController {
     }
 
     @PostMapping("/logout")
-    public ResponseEntity<?> logout(HttpServletRequest request) {
+    public ResponseEntity<String> logout(HttpServletRequest request, HttpServletResponse response) {
         try {
-            String message = authService.logout(request);
+            String message = authService.logout(request, response);
             return ResponseEntity.ok(message);
         } catch (AuthException e) {
             return ResponseEntity.status(e.getStatus()).body(e.getMessage());
@@ -54,7 +54,7 @@ public class AuthController {
     @PostMapping("/refresh")
     public ResponseEntity<?> refreshToken(
             @CookieValue(name = "refreshToken", required = false) String refreshToken) {
-        // authService에서 토큰 갱신 로직을 처리합니다.
+
         String newAccessToken = authService.refreshAccessToken(refreshToken);
         System.out.println("New access token: " + newAccessToken);
         Map<String, String> tokenMap = new HashMap<>();

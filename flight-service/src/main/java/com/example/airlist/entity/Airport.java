@@ -18,12 +18,13 @@ public class Airport {
     @Column(name = "a_id")
     private Long id;
 
-    @Column(name = "a_NameK")
-    private String aNameKor; //김포
-    @Column(name = "a_NameE")
-    private String aNameEng;  //Gimpo
-    @Column(name = "a_Code")
-    private String aCode; //GMP
-    @Column(name = "a_City")
-    private String aCity; //서울
+    @Column(name = "a_code", length = 10)
+    private String code; // GMP, ICN 등
+
+    @Column(name = "a_namek", nullable = false)
+    private String nameKorean; // 김포국제공항
+
+    @Column(name = "continent", nullable = false)
+    private String continent; // asia, europe 등
+
 }

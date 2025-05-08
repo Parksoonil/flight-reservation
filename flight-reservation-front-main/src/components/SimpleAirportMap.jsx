@@ -1,7 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import axios from "axios";
-import "../style/SimpleAirportMap.css";
-import apiClient from "../apiClient.jsx";
+import "../style/CustomeMarker.css"; // 마커 스타일 등 포함
 
 const airportCoords = {
     "김포국제공항": { lat: 37.5585, lng: 126.7902 },
@@ -23,8 +22,8 @@ function SimpleAirportMap() {
 
     const fetchFlightList = async (from, to) => {
         try {
-            const res = await apiClient.get(
-                `/api/flights/search?tripType=oneway&departure=${from}&arrival=${to}`
+            const res = await axios.get(
+                `http://localhost:8080/api/flights/search?tripType=oneway&departure=${from}&arrival=${to}`
             );
             setFlights(res.data.content);
             console.log(res.data);
@@ -46,7 +45,6 @@ function SimpleAirportMap() {
                     center: new window.kakao.maps.LatLng(35.8, 127.5),
                     level: 13,
                 });
-
                 mapRef.current = map;
 
                 Object.entries(airportCoords).forEach(([name, { lat, lng }]) => {
@@ -54,8 +52,9 @@ function SimpleAirportMap() {
 
                     // 말풍선 마커 스타일 (커스텀 오버레이)
                     const markerContent = document.createElement("div");
-                    markerContent.className = `custom-marker ${name === departure || name === arrival ? "selected" : ""
-                        }`;
+                    markerContent.className = `custom-marker ${
+                        name === departure || name === arrival ? "selected" : ""
+                    }`;
                     markerContent.innerText = name;
                     markerContent.onclick = () => {
                         if (!departure) {
@@ -87,40 +86,72 @@ function SimpleAirportMap() {
     }, [departure, arrival]);
 
     return (
-        <div className="map-layout">
+        <div style={{ display: "flex", gap: "2rem" }}>
             {/* 지도 영역 */}
-            <div id="airport-map" />
+            <div
+                id="airport-map"
+                style={{
+                    width: "65%",
+                    height: "550px",
+                    borderRadius: "12px",
+                    margin: "2rem 0",
+                    boxShadow: "0 4px 12px rgba(0, 0, 0, 0.1)",
+                }}
+            />
 
-            {/* 오른쪽 리스트 영역 */}
-            <div className="flight-list-container">
-                {/* 출발지 및 도착지 정보 */}
-                <div className="flight-info">
-                    <h3 className="flight-list-title">선택된 항공편</h3>
-                    <div style={{ marginBottom: "1rem" }}>
+            {/* 오른쪽 영역 (전체 높이 고정) */}
+            <div
+                style={{
+                    flex: 1,
+                    marginTop: "2rem",
+                    height: "550px",              // 전체 고정 높이
+                    display: "flex",
+                    flexDirection: "column",
+                }}
+            >
+                {/* 고정된 상단 */}
+                <div style={{ marginBottom: "1rem" }}>
+                    <h3 style={{ color: "#007bff", marginBottom: "0.5rem" }}>선택된 항공편</h3>
+                    <div>
                         <strong>출발지:</strong> {departure || "미정"} | <strong>도착지:</strong> {arrival || "미정"}
                     </div>
                 </div>
 
-                {/* 리스트만 따로 스크롤되게 */}
-                <div className="flight-list-scroll">
+                {/* 스크롤 되는 리스트 */}
+                <div
+                    style={{
+                        overflowY: "auto",
+                        flex: 1,
+                        paddingRight: "8px",
+                        borderTop: "1px solid #ddd",
+                        paddingTop: "1rem",
+                    }}
+                >
                     {flights.length > 0 ? (
                         flights.map((flight, idx) => (
-                            <div key={idx} className="flight-list-item">
+                            <div
+                                key={idx}
+                                style={{
+                                    padding: "1rem",
+                                    marginBottom: "1rem",
+                                    background: "#f5f9ff",
+                                    border: "1px solid #ccc",
+                                    borderRadius: "10px"
+                                }}
+                            >
                                 ✈ {flight.departureName} → {flight.arrivalName}
                                 <br />
                                 🗓 {flight.departureTime?.split("T")[0]}
                             </div>
                         ))
                     ) : (
-                        <div className="no-flight-message">
-                            <span role="img" aria-label="airplane" className="emoji">✈️</span>
-                            <p>출발지와 도착지를 지도에서 선택해주세요.</p>
-                        </div>
+                        <p>출발지와 도착지를 지도에서 선택해주세요.</p>
                     )}
                 </div>
             </div>
-
         </div>
+
+
     );
 }
 

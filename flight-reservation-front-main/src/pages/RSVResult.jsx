@@ -1,7 +1,6 @@
 import { useSelector } from 'react-redux';
 import { useEffect, useState } from 'react';
 import axios from 'axios';
-import apiClient from "../apiClient.jsx";
 
 function RSVResult() {
     const { flight, selectedSeats, contact, request } = useSelector((state) => state.reservation);
@@ -14,57 +13,37 @@ function RSVResult() {
             hour12: false,
         });
 
-        useEffect(() => {
-            const saveReservation = async () => {
-                setStatus('saving');
-        
-                const loggedUser = localStorage.getItem('user');
-                const user = loggedUser ? JSON.parse(loggedUser) : null;
-        
-                const baseData = {
-                    selectedSeats,
-                    contact,
-                    request,
-                    userId: user?.id,
-                    username: user?.username,
-                    paymentComplete: true,
-                    reservedAt: new Date().toISOString(),
-                };
-        
-                const saveSingleReservation = async (flightData) => {
-                    const reservation = {
-                        ...baseData,
-                        flight: flightData,
-                    };
-        
-                    try {
-                        await apiClient.post('api/reservations', reservation);
-                    } catch (error) {
-                        throw error;
-                    }
-                };
-        
-                try {
-                    if (flight?.goFlight) {
-                        await saveSingleReservation(flight.goFlight);
-                    }
-        
-                    if (flight?.backFlight) {
-                        await saveSingleReservation(flight.backFlight);
-                    }
-        
-                    setStatus('success');
-                } catch (error) {
-                    console.error('예약 저장 실패:', error);
-                    setStatus('error');
-                }
+    useEffect(() => {
+        const saveReservation = async () => {
+            setStatus('saving');
+
+            const loggedUser = localStorage.getItem('user');
+            const user = loggedUser ? JSON.parse(loggedUser) : null;
+
+            const reservationData = {
+                flight,
+                selectedSeats,
+                contact,
+                request,
+                userId: user?.id,
+                username: user?.username,
+                paymentComplete: true,
+                reservedAt: new Date().toISOString(),
             };
-        
-            if (flight?.goFlight) {
-                saveReservation();
+
+            try {
+                await axios.post('http://localhost:5000/reservations', reservationData);
+                setStatus('success');
+            } catch (error) {
+                console.error('예약 저장 실패:', error);
+                setStatus('error');
             }
-        }, [flight, selectedSeats, contact, request]);
-        
+        };
+
+        if (flight?.goFlight) {
+            saveReservation();
+        }
+    }, [flight, selectedSeats, contact, request]);
 
     return (
         <div style={{ padding: '20px' }}>
