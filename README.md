@@ -72,3 +72,104 @@
    ```bash
    git clone https://github.com/Parksoonil/flight-reservation.git
    cd flight-reservation
+아래는 요청하신 내용대로 작성한 Markdown 예시입니다:
+
+---
+
+```markdown
+# Flight Reservation 프로젝트
+
+이 프로젝트는 백엔드(마이크로서비스)와 프론트엔드(React + Vite)로 구성되어 있으며, 각 마이크로서비스는 독립된 Gradle 모듈 또는 애플리케이션으로 구성되어 있습니다.
+
+---
+
+## 백엔드 (마이크로서비스) 빌드 및 실행
+
+### 공통 빌드 (예시)
+```bash
+./gradlew build
+```
+
+### Eureka 서버 실행 (포트 8761)
+```bash
+./gradlew :eureka-server:bootRun
+```
+
+### Gateway 실행 (포트 8443)
+```bash
+./gradlew :gateway:bootRun
+```
+
+### 유저 서비스 실행 (포트 8081)
+```bash
+./gradlew :user-service:bootRun
+```
+
+### 항공 서비스 실행 (포트 8082)
+```bash
+./gradlew :flight-service:bootRun
+```
+
+### 예매 서비스 실행 (포트 8083)
+```bash
+./gradlew :reservation-service:bootRun
+```
+
+각 서비스 실행 후, [Eureka 대시보드](http://localhost:8761)에 접속하여 등록된 서비스 목록을 확인할 수 있습니다.
+
+---
+
+## 프론트엔드 실행 (React + Vite)
+
+1. 프론트엔드 디렉토리로 이동:
+   ```bash
+   cd flight-reservation-front-main
+   npm install
+   ```
+2. 개발 서버 실행:
+   ```bash
+   npm run dev
+   ```
+3. 브라우저에서 [http://localhost:5173](http://localhost:5173)으로 접속하여 프론트엔드 애플리케이션을 확인합니다.
+
+---
+
+## 사용 방법
+
+- **웹 인터페이스**: 브라우저에서 Gateway 주소([https://localhost:8443](https://localhost:8443))를 통해 각 서비스 기능에 접근합니다.
+- **API 사용**: 각 마이크로서비스는 독립적인 RESTful API를 제공하며, Swagger 또는 Postman을 통해 개별 API 엔드포인트를 테스트할 수 있습니다.
+- **서비스 디스커버리**: Eureka 대시보드를 통해 현재 등록된 서비스 목록 및 상태를 확인할 수 있습니다.
+
+---
+
+## 프로젝트 팀 및 담당 분야
+
+- **박순일**: 유저 서비스 담당 및 통합 담당
+- **이용수**: 항공 서비스 담당 및 카카오맵 API 연동 담당
+- **최민석**: 예매 서비스 담당, 결제 서비스 및 Kafka 통신 설계
+- **박세호**: 프론트 엔드 총괄 및 디자인 담당, 날씨 API 연동 담당
+
+---
+
+## 기여 방법
+
+1. 레포지토리를 fork합니다.
+2. 새로운 브랜치를 생성합니다.
+   ```bash
+   git checkout -b feature/새로운기능
+   ```
+3. 변경 사항을 commit합니다.
+4. 변경 사항을 push한 후, pull request를 생성합니다.
+5. 문제 제보나 기능 요청은 Issue를 등록해 주시면 감사하겠습니다.
+
+---
+
+## 라이센스
+
+이 프로젝트는 **MIT 라이센스** 하에 배포됩니다. 자세한 내용은 [`LICENSE`](LICENSE) 파일을 참조하세요.
+
+---
+
+## 문의 및 연락처
+
+프로젝트 관련 문의는 [Parksoonil GitHub 프로필](https://github.com/parksoonil) 또는 이슈 트래커를 통해 연락해주시면 됩니다.
