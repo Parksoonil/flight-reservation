@@ -57,6 +57,13 @@
   - **폴더명**: `flight-reservation-front-main`  
   - **개발 서버 포트**: 5173  
 - **데이터베이스**: MySQL 또는 PostgreSQL
+  
+## API 문서화 (Swagger)
+각 마이크로서비스의 API는 Swagger를 통해 문서화되어 있습니다.  
+개발 및 테스트 과정에서 Swagger UI를 사용하여 API 명세를 확인하고, 인터랙티브하게 테스트할 수 있습니다.  
+예를 들어, Gateway 서비스의 Swagger 문서는 다음 URL에서 확인할 수 있습니다:  
+[https://localhost:8443/swagger-ui.html](https://localhost:8443/swagger-ui.html)  
+각 서비스마다 별도의 Swagger 문서 페이지가 제공될 수 있으니, 필요 시 해당 URL을 참고하세요.
 
 ## 설치 및 실행 방법
 
