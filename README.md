@@ -82,7 +82,7 @@
 
 ## Screenshots
 아래는 실제 가동화면 메인페이지의 예시 스크린샷입니다.
-
+![Main Page Screenshot](./images/mainpage.png)
 
 ## 설치 및 실행 방법
 
