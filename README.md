@@ -72,16 +72,11 @@
    ```bash
    git clone https://github.com/Parksoonil/flight-reservation.git
    cd flight-reservation
-아래는 요청하신 내용대로 작성한 Markdown 예시입니다:
 
----
-
-```markdown
 # Flight Reservation 프로젝트
 
 이 프로젝트는 백엔드(마이크로서비스)와 프론트엔드(React + Vite)로 구성되어 있으며, 각 마이크로서비스는 독립된 Gradle 모듈 또는 애플리케이션으로 구성되어 있습니다.
 
----
 
 ## 백엔드 (마이크로서비스) 빌드 및 실행
 
