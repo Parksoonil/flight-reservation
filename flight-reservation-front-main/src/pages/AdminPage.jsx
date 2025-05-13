@@ -3,10 +3,14 @@ import React, { useState, useEffect } from "react";
 import apiClient from "../apiClient";
 import UserManagement from "../components/UserManagement";
 import FlightManagement from "../components/FlightManagement";
+import ReservationManagement from "../components/ReservationManagement.jsx";
 
 const AdminPage = () => {
     const [selectedService, setSelectedService] = useState("users");
     const [users, setUsers] = useState([]);
+    const [reservations, setReservations] = useState([]);
+    // 필요한 경우 flight 상태도 추가할 수 있습니다.
+    // const [flights, setFlights] = useState([]);
 
     useEffect(() => {
         if (selectedService === "users") {
@@ -18,8 +22,18 @@ const AdminPage = () => {
                 .catch((error) => {
                     console.error("Error fetching users:", error);
                 });
+        } else if (selectedService === "reservation") {
+            apiClient
+                .get("/api/admin/reservations")
+                .then((response) => {
+                    console.log(response.data)
+                    setReservations(response.data);
+                })
+                .catch((error) => {
+                    console.error("Error fetching reservations:", error);
+                });
         }
-        // 추가 서비스에 대한 API 호출 분기를 여기에 추가할 수 있습니다.
+        // 항공 관리를 위한 API 호출도 필요하다면 여기에 else if 조건을 추가합니다.
     }, [selectedService]);
 
     const handleServiceClick = (service) => {
@@ -76,10 +90,10 @@ const AdminPage = () => {
                 )}
                 {selectedService === "flight" && <FlightManagement />}
                 {selectedService === "reservation" && (
-                    <div>
-                        <h1>Reservation Management</h1>
-                        <p>예약 관리 페이지는 추후 구현 예정입니다.</p>
-                    </div>
+                    <ReservationManagement
+                        reservations={reservations}
+                        setReservations={setReservations}
+                    />
                 )}
             </div>
         </div>

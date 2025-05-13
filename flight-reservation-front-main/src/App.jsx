@@ -36,6 +36,7 @@ import apiClient from "./apiClient.jsx";
 import ProtectedRoute from "./ProtectedRoute.jsx";
 import PublicRoute from "./store/PublicRoute.jsx";
 import EditProfile from "./pages/EditProfile.jsx";
+import GroupPayment from "./pages/GroupPayment.jsx";
 
 
 function App() {
@@ -113,6 +114,7 @@ function App() {
           <Route path="/flight" element={<FlightPage />} />
           <Route path="/mypage" element={<MyPage />} />
           <Route path="/payment" element={<Payment />} />
+          <Route path="/group-payment" element={<GroupPayment />} />
           <Route path="/board" element={<BoardPage />} />
           <Route path="/bwrite" element={<BoardWrite />} />
           <Route path="/board/:boardId" element={<BoardDetail />} />

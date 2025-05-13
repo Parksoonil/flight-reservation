@@ -5,14 +5,15 @@ import "../style/Mypage.css";
 import apiClient from "../apiClient.jsx";
 import { jwtDecode } from "jwt-decode";
 import {logout} from "../store/authSlice.js";
+import ReservationList from "../components/ReservationList.jsx"
 
 function MyPage() {
     const dispatch = useDispatch();
     const { accessToken } = useSelector((state) => state.auth);
     const [user, setUser] = useState(null);
-    const [reservations, setReservations] = useState([]);
     const navigate = useNavigate();
     const currentUserEmail = useSelector((state) => state.auth.email);
+
     // 전화번호 형식을 "010-2222-3333"으로 변경하는 헬퍼 함수
     const formatPhone = (phone) => {
         if (!phone || phone.length < 10) return phone;
@@ -60,10 +61,6 @@ function MyPage() {
                 const userData = Array.isArray(userDataRaw) ? userDataRaw[0] : userDataRaw;
                 if (userData) {
                     setUser(userData);
-
-                    // 예약 내역도 userid 기준으로 API 호출
-                    const { data: reservationsData } = await apiClient.get(`api/reservations?userId=${userid}`);
-                    setReservations(reservationsData);
                 }
             } catch (error) {
                 console.error("사용자 정보 또는 예약을 불러오는 데 실패했습니다.", error);
@@ -144,32 +141,7 @@ function MyPage() {
                     <p>
                         <strong>주소:</strong> {user.address}
                     </p>
-
-                    <h3>예약 목록</h3>
-                    {reservations.length > 0 ? (
-                        <div className="reservation-list">
-                            {reservations.map((reservation) => (
-                                <div className="reservation-card" key={reservation.id}>
-                                    <h4>예약 번호: {reservation.id}</h4>
-                                    <p>
-                                        <strong>항공편:</strong> {reservation.flight.aircraftType}
-                                    </p>
-                                    <p>
-                                        <strong>출발지 / 도착지:</strong> {reservation.flight.departureName} /{" "}
-                                        {reservation.flight.arrivalName}
-                                    </p>
-                                    <p>
-                                        <strong>출발 날짜:</strong> {reservation.flight.departureTime.split("T")[0]}
-                                    </p>
-                                    <p>
-                                        <strong>좌석 번호:</strong> {reservation.selectedSeats.join(", ")}
-                                    </p>
-                                </div>
-                            ))}
-                        </div>
-                    ) : (
-                        <p>현재 예약이 없습니다.</p>
-                    )}
+                    <ReservationList userId={user.id} />
                 </>
             ) : (
                 <p>Loading...</p>

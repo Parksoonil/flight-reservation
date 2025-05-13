@@ -165,7 +165,7 @@ const FlightManagement = () => {
     return (
         <div className="flight-management">
             <h1 className="flight-management__title">항공권 관리</h1>
-            <button onClick={handleCreateClick} className="flight-management__create-btn">
+            <button onClick={handleCreateClick} className="flight-management__clear-btn">
                 항공권 생성
             </button>
 
