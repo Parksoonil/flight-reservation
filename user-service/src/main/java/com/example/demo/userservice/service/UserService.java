@@ -8,6 +8,7 @@ import java.util.Optional;
 
 public interface UserService {
     List<UserEntity> findAll();
+    UserEntity save(UserEntity user);
     List<UserEntity> findUserByIdIncludeDeleted();
     Optional<UserEntity> findById(Long id);
     String findIdByPhone(String phone);

@@ -17,23 +17,28 @@ function Login() {
     const handleLogin = async (e) => {
         e.preventDefault();
         try {
-            // 서버 요청: 이제 사용자 정보 대신 accessToken만 반환한다고 가정
-            const res = await apiClient.post(
-                "api/users/login",
-                { email, password }
-            );
+            const res = await apiClient.post("api/users/login", { email, password });
+            // 백엔드가 로그인 성공 시 accessToken만 반환합니다.
             const { accessToken } = res.data;
 
+            // JWT 토큰 디코딩
             const decoded = jwtDecode(accessToken);
-            const userEmail = decoded.sub; // 토큰 발급 시 setSubject(email) 했던 값
+            const userEmail = decoded.sub; // 토큰의 subject에 저장된 이메일
 
-            // Redux를 통해 로그인 상태 업데이트 (필요한 경우 decoded 전체를 저장해도 됨)
+            // Redux에 로그인 정보 저장
             dispatch(login({ email: userEmail, accessToken, user: decoded }));
 
             alert("로그인 성공");
             navigate("/");
         } catch (err) {
             console.error("로그인 오류", err);
+
+            // 백엔드에서 삭제 요청된 사용자인 경우 403 상태와 지정한 메시지를 반환합니다.
+            if (err.response && err.response.status === 403 && err.response.data === "삭제 요청된 사용자입니다.") {
+                alert("삭제 요청된 사용자입니다. 관리자에게 문의해 주세요.");
+                return;
+            }
+            // 그 외 인증 실패의 경우 에러 메시지 출력
             setError("이메일 또는 비밀번호를 확인해 주세요");
         }
     };

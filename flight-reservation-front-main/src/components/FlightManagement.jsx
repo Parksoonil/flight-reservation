@@ -38,7 +38,6 @@ const FlightManagement = () => {
         apiClient
             .get("api/admin/flights")
             .then((response) => {
-                console.log(response.data);
                 setFlights(response.data);
             })
             .catch((error) => {
@@ -51,7 +50,6 @@ const FlightManagement = () => {
         apiClient
             .get("api/admin/flights/airports")
             .then((response) => {
-                console.log(response.data);
                 setAirports(response.data);
             })
             .catch((error) => {
@@ -71,6 +69,12 @@ const FlightManagement = () => {
                 console.error("Error fetching aircraft models:", error);
             });
     }, []);
+
+    // 항공기 모델 배열(aircraftModels)에서 flight.aircraftType과 일치하는 모델 객체의 'cline' 값을 반환하는 함수
+    const getAirlineName = (aircraftType) => {
+        const model = aircraftModels.find((m) => m.cmodel === aircraftType);
+        return model ? model.cline : "N/A";
+    };
 
     // 날짜 포맷 변환 (YYYY-MM-DD HH:mm)
     const formatDateTime = (dateStr) => {
@@ -297,7 +301,7 @@ const FlightManagement = () => {
                     </div>
 
                     <div className="flight-management__form-group">
-                        <label>항공 클래스</label>
+                        <label>항공사</label>
                         <input
                             type="text"
                             name="flightClass"
@@ -334,7 +338,7 @@ const FlightManagement = () => {
                         <th className="flight-management__table-header">도착 시간</th>
                         <th className="flight-management__table-header">항공기 모델</th>
                         <th className="flight-management__table-header">좌석 수</th>
-                        <th className="flight-management__table-header">항공 클래스</th>
+                        <th className="flight-management__table-header">항공사</th>
                         <th className="flight-management__table-header">Actions</th>
                     </tr>
                     </thead>
@@ -348,7 +352,9 @@ const FlightManagement = () => {
                             <td className="flight-management__table-cell">{formatDateTime(flight.arrivalTime)}</td>
                             <td className="flight-management__table-cell">{flight.aircraftType}</td>
                             <td className="flight-management__table-cell">{flight.seatCount}</td>
-                            <td className="flight-management__table-cell">{flight.flightClass}</td>
+                            <td className="flight-management__table-cell">
+                                {getAirlineName(flight.aircraftType)}
+                            </td>
                             <td className="flight-management__table-cell">
                                 <button onClick={() => handleEditClick(flight)} className="flight-management__edit-btn">
                                     수정

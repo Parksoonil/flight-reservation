@@ -48,6 +48,9 @@ public class AuthServiceImpl implements AuthService {
             throw new AuthException("Invalid password", HttpStatus.UNAUTHORIZED);
         }
 
+        if (user.getDeletedAt() != null) {
+            throw new AuthException("삭제 요청된 사용자입니다.", HttpStatus.FORBIDDEN);
+        }
 
         // 액세스, 리프래시 토큰 생성
         String accessToken = accessTokenProvider.createToken(user.getEmail());

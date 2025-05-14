@@ -37,6 +37,16 @@ const UserManagement = ({ users, setUsers }) => {
         return true;
     });
 
+    const formatDateTime = (dateStr) => {
+        if (!dateStr) return "";
+        const date = new Date(dateStr);
+        return `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, "0")}-${String(
+            date.getDate()
+        ).padStart(2, "0")} ${String(date.getHours()).padStart(2, "0")}:${String(
+            date.getMinutes()
+        ).padStart(2, "0")}`;
+    };
+
     // 입력 변경 핸들러 (일반 텍스트 필드)
     const handleFieldChange = (field) => (e) => {
         setEditingUser({ ...editingUser, [field]: e.target.value });
@@ -47,7 +57,7 @@ const UserManagement = ({ users, setUsers }) => {
         setEditingUser({ ...editingUser, admin: e.target.checked });
     };
 
-    // 수정 폼 제출 시 API 호출하여 업데이트
+// 수정 폼 제출 시 API 호출하여 업데이트
     const handleUpdateUser = (e) => {
         e.preventDefault();
         apiClient
@@ -68,16 +78,45 @@ const UserManagement = ({ users, setUsers }) => {
             });
     };
 
-    // 유저 삭제 핸들러
-    const deleteUser = (id) => {
-        apiClient
-            .delete(`/api/admin/users/${id}`)
-            .then(() => {
-                setUsers((prevUsers) => prevUsers.filter((user) => user.id !== id));
-            })
-            .catch((error) => {
-                console.error("Error deleting user:", error);
-            });
+// 유저 삭제 요청/탈퇴 취소 핸들러:
+// 삭제일(deletedAt)이 없으면 삭제(API DELETE) 요청,
+// 삭제일이 있는 경우엔 탈퇴 취소(API PUT) 요청하여 삭제일을 null로 업데이트함.
+    const handleDeleteOrCancel = (user) => {
+        if (user.deletedAt) {
+            // 탈퇴 취소: API PUT 요청을 통해 deletedAt 값을 null로 업데이트
+            apiClient
+                .put(`/api/admin/users/${user.id}/cancelDeletion`)
+                .then(() => {
+                    alert("탈퇴 취소 성공!");
+                    // 상태 업데이트: 해당 유저의 deletedAt을 null로 변경
+                    setUsers((prevUsers) =>
+                        prevUsers.map((u) =>
+                            u.id === user.id ? { ...u, deletedAt: null } : u
+                        )
+                    );
+                })
+                .catch((error) => {
+                    console.error("Error cancelling deletion:", error);
+                    alert("탈퇴 취소 실패!");
+                });
+        } else {
+            // 삭제 요청: API DELETE 요청을 통해 삭제 처리 (서버에서 deletedAt 값을 현재 시간 등으로 업데이트)
+            apiClient
+                .delete(`/api/admin/users/${user.id}`)
+                .then(() => {
+                    alert("삭제 요청 성공!");
+                    // 상태 업데이트: 해당 유저의 deletedAt 값을 현재 시간(ISO 문자열)으로 설정
+                    setUsers((prevUsers) =>
+                        prevUsers.map((u) =>
+                            u.id === user.id ? { ...u, deletedAt: new Date().toISOString() } : u
+                        )
+                    );
+                })
+                .catch((error) => {
+                    console.error("Error deleting user:", error);
+                    alert("삭제 요청 실패!");
+                });
+        }
     };
 
     // 검색 필드 초기화
@@ -258,9 +297,9 @@ const UserManagement = ({ users, setUsers }) => {
                             <td className="user-management__table-cell">{user.password}</td>
                             <td className="user-management__table-cell">{user.phone}</td>
                             <td className="user-management__table-cell">{user.birthday}</td>
-                            <td className="user-management__table-cell">{user.createdAt}</td>
+                            <td className="user-management__table-cell">{formatDateTime(user.createdAt)}</td>
                             <td className="user-management__table-cell">
-                                {user.deletedAt ? user.deletedAt : "활성"}
+                                {user.deletedAt ? formatDateTime(user.deletedAt) : "활성"}
                             </td>
                             <td className="user-management__table-cell">{user.address}</td>
                             <td className="user-management__table-cell">
@@ -273,22 +312,29 @@ const UserManagement = ({ users, setUsers }) => {
                                 >
                                     수정
                                 </button>
-                                <button
-                                    className="user-management__delete-btn"
-                                    onClick={() => deleteUser(user.id)}
-                                >
-                                    삭제
-                                </button>
+                                {user.deletedAt ? (
+                                    <button
+                                        className="user-management__cancel-btn"
+                                        onClick={() => handleDeleteOrCancel(user)}
+                                    >
+                                        탈퇴 취소
+                                    </button>
+                                ) : (
+                                    <button
+                                        className="user-management__delete-btn"
+                                        onClick={() => handleDeleteOrCancel(user)}
+                                    >
+                                        삭제
+                                    </button>
+                                )}
                             </td>
                         </tr>
                     ))}
                     </tbody>
                 </table>
             ) : (
-                <div className="user-management__no-users">No Users Found</div>
+                <p>유저가 없습니다.</p>
             )}
-
-
         </div>
     );
 };

@@ -74,16 +74,15 @@ const ReservationManagement = ({ reservations, setReservations }) => {
             });
     };
 
-    function formatDateTime(dateTimeStr) {
-        const date = new Date(dateTimeStr);
-        const year = date.getFullYear();
-        const month = date.getMonth() + 1; // 월은 0부터 시작하므로 +1 해줍니다.
-        const day = date.getDate();
-        const hours = date.getHours();
-        const minutes = date.getMinutes();
-
-        return `${year}년 ${month}월 ${day}일 ${hours}시 ${minutes}분`;
-    }
+    const formatDateTime = (dateStr) => {
+        if (!dateStr) return "";
+        const date = new Date(dateStr);
+        return `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, "0")}-${String(
+            date.getDate()
+        ).padStart(2, "0")} ${String(date.getHours()).padStart(2, "0")}:${String(
+            date.getMinutes()
+        ).padStart(2, "0")}`;
+    };
 
     // 예약 삭제 핸들러
     const deleteReservation = (rId) => {

@@ -3,6 +3,7 @@ package com.example.demo.userservice.controller;
 import com.example.demo.userservice.dto.UserUpdateDTO;
 import com.example.demo.userservice.entity.UserEntity;
 import com.example.demo.userservice.service.UserService;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
@@ -32,6 +33,32 @@ public class AdminUserController {
         return userService.findById(id)
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
+    }
+
+    /**
+     * 탈퇴 취소 API
+     * @param id 사용자 ID
+     * @return 처리 결과 메시지
+     */
+    @PutMapping("/{id}/cancelDeletion")
+    public ResponseEntity<?> cancelUserDeletion(@PathVariable Long id) {
+        Optional<UserEntity> optionalUser = userService.findById(id);
+        if (!optionalUser.isPresent()) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body("사용자를 찾을 수 없습니다.");
+        }
+
+        UserEntity user = optionalUser.get();
+        if (user.getDeletedAt() == null) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .body("해당 사용자는 삭제 요청 상태가 아닙니다.");
+        }
+
+        // 탈퇴 취소: 삭제일(deletedAt)을 null로 설정
+        user.setDeletedAt(null);
+        userService.save(user);
+
+        return ResponseEntity.ok("탈퇴 취소가 완료되었습니다.");
     }
 
     // 사용자 생성
