@@ -119,6 +119,7 @@ services:
     depends_on:
       - gateway
       - db
+      - kafka
     networks:
       - msa-network
 
@@ -132,6 +133,8 @@ services:
       gateway:
         condition: service_started
       db:
+        condition: service_started
+      kafka:
         condition: service_started
     networks:
       - msa-network
