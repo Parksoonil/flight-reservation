@@ -1,0 +1,268 @@
+.flight-list {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 20px;
+    padding: 2rem;
+    margin: 0 auto;
+}
+
+/* ✅ 왕복일 경우 더 넓게 보이도록 */
+.flight-list.wide-mode {
+}
+
+
+.flight-card {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-radius: 16px;
+    padding: 1.5rem 2rem;
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(15px);
+    background-color: white;
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    color: black;
+}
+
+
+.flight-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 12px 32px rgba(0, 0, 0, 0.2);
+    background-color: #e1ebff;
+    border: 1px solid rgba(255, 255, 255, 0.25);
+    backdrop-filter: blur(30px);
+}
+
+
+.section {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.section-left, .section-right {
+    width: 25%;
+    text-align: center;
+}
+
+.section-center {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.center-twin {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: flex-start;  /* ← 상단 기준 정렬 */
+    gap: 2rem;
+}
+
+.section-left h3 {
+    font-size: 1.2rem;
+    font-weight: 700;
+    color: #0066cc;
+}
+
+.section-left p,
+.section-right p {
+    font-size: 0.9rem;
+    color: #444;
+}
+
+.center-top {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 2rem;
+    justify-content: center;
+}
+
+.center-bottom {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    width: 100%;
+    font-size: 0.9rem;
+    color: #444;
+    padding: 0 2rem;
+}
+
+.time-info {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+}
+
+.time {
+    font-size: 1.2rem;
+    font-weight: bold;
+    color: #333;
+}
+
+
+.flight-duration {
+    font-size: 0.95rem;
+    font-weight: 600;
+    color: #333;
+}
+
+.price {
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: #ff4d4f;
+    margin-top: 8px;
+}
+
+.seats {
+    font-size: 0.9rem;
+    color: #666;
+}
+
+.location {
+    font-size: 0.9rem;
+    color: #555;
+    margin-top: 0.2rem;
+}
+
+.duration-info {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.9rem;
+    font-weight: bold;
+    color: #666;
+    min-width: 100px;
+}
+
+.slide-detail {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.5s ease-in-out, padding 0.4s;
+    background-color: #f9fcff;
+    border-top: 2px solid #d0e9ff;
+    border-radius: 0 0 12px 12px;
+}
+
+.slide-detail.open {
+    max-height: 300px;
+    padding: 1.5rem 2rem;
+}
+
+.flight-detail-inner {
+    text-align: center;
+}
+
+.flight-detail-inner .destination {
+    font-size: 1.6rem;
+    font-weight: bold;
+    color: #2c3e50;
+    margin-bottom: 0.5rem;
+}
+
+.flight-detail-inner p {
+    font-size: 1rem;
+    margin: 0.4rem 0;
+    color: #333;
+}
+
+.reserve-button {
+    margin-top: 1rem;
+    padding: 0.5rem 1.2rem;
+    background-color: #0077ff;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-size: 1rem;
+    cursor: pointer;
+}
+
+.reserve-button:hover {
+    background-color: #005fcc;
+}
+
+
+/* 왕복일경우 열 방식으로 배치 */
+.round-trip-columns {
+    display: flex;
+    justify-content: space-between;
+    gap: 40px;
+    width: 100%;
+    text-align: center;
+}
+
+.round-trip-columns .column {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+
+.selected-flights-box {
+    background: linear-gradient(to right, #e3f2fd, #ffffff);
+    border: 2px solid #90caf9;
+    border-radius: 16px;
+    padding: 1.5rem 2rem;
+    margin-bottom: 2rem;
+    box-shadow: 0 4px 15px rgba(0, 123, 255, 0.1);
+    text-align: left;
+    max-width: 100%;
+    transition: all 0.3s ease;
+}
+
+.selected-flights-box:hover {
+    box-shadow: 0 6px 20px rgba(0, 123, 255, 0.2);
+}
+
+
+.selected-flight {
+    background-color: #ffffff;
+    border-left: 4px solid #2196f3;
+    padding: 1rem;
+    margin: 0.75rem 0;
+    border-radius: 10px;
+    font-weight: 600;
+    color: #333;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+    transition: background-color 0.3s;
+}
+
+.selected-flight:hover {
+    background-color: #f0f7ff;
+}
+
+.flight-card.selected {
+    background-color: #f0f8ff;
+    border: 2px solid #007bff;
+}
+
+.booking-button {
+    background-color: #007bff;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    cursor: pointer;
+    font-size: 16px;
+    margin-top: 20px;
+}
+
+.booking-button:disabled {
+    background-color: #ddd;
+    cursor: not-allowed;
+}
+
+.no-search-message {
+    text-align: center;
+    margin-top: 40px;
+    font-size: 1.2rem;
+    color: #777;
+}
