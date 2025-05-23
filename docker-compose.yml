@@ -83,6 +83,8 @@ services:
     build: ./flight-reservation-gateway
     ports:
       - "8443:8443"
+    env_file:
+      - .env
     networks:
       - msa-network
     healthcheck:
@@ -105,6 +107,8 @@ services:
     build: ./user-service
     ports:
       - "8081:8081"
+    env_file:
+      - .env
     depends_on:
       - gateway
       - db

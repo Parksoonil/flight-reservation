@@ -6,21 +6,28 @@ import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.security.Keys;
+import jakarta.annotation.PostConstruct;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import java.security.Key;
+import java.util.Base64;
 import java.util.Date;
 
 @Component("refreshTokenProvider")
 public class RefreshTokenProviderImpl implements TokenProvider {
 
-    // 리프래시 토큰은 보통 액세스 토큰보다 훨씬 긴 유효기간을 갖습니다 (예: 7일)
-    private final Key jwtSecret = Keys.secretKeyFor(SignatureAlgorithm.HS512);
     private final long validityInMillis = 7 * 24 * 60 * 60 * 1000; // 7일
-    private final UserRepository userRepository;
 
-    public RefreshTokenProviderImpl(UserRepository userRepository) {
-        this.userRepository = userRepository;
+    @Value("${jwt.secret}")
+    private String jwtSecret;
+
+    private Key key;
+
+    @PostConstruct
+    public void init() {
+        byte[] decodedKey = Base64.getEncoder().encode(jwtSecret.getBytes());
+        this.key = Keys.hmacShaKeyFor(decodedKey); // io.jsonwebtoken.security.Keys
     }
 
     @Override

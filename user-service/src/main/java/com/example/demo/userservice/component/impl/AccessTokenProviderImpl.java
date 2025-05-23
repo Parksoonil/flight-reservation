@@ -6,19 +6,32 @@ import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.security.Keys;
+import jakarta.annotation.PostConstruct;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import java.security.Key;
+import java.util.Base64;
 import java.util.Date;
 
 @Component("accessTokenProvider")
 public class AccessTokenProviderImpl implements TokenProvider {
-    private final Key jwtSecret = Keys.secretKeyFor(SignatureAlgorithm.HS512);
     private final long validityInMillis = 15 * 60 * 1000; // 15분
     private final UserRepository userRepository;
 
     public AccessTokenProviderImpl(UserRepository userRepository) {
         this.userRepository = userRepository;
+    }
+
+    @Value("${jwt.secret}")
+    private String jwtSecret;
+
+    private Key key;
+
+    @PostConstruct
+    public void init() {
+        byte[] decodedKey = Base64.getEncoder().encode(jwtSecret.getBytes());
+        this.key = Keys.hmacShaKeyFor(decodedKey); // io.jsonwebtoken.security.Keys
     }
 
     @Override
