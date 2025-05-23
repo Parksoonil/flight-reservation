@@ -94,7 +94,7 @@ services:
   front:
     build: ./flight-reservation-front-main
     ports:
-      - "3000:80"
+      - "5173:80"
     depends_on:
       gateway:
         condition: service_healthy

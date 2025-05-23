@@ -24,9 +24,12 @@ import Payment from "../pages/reservation/Payment.jsx";
 import ReservationLayout from "../layouts/ReservationLayout.jsx";
 
 const RouteSetup = () => {
-    const { isLoggedIn, user } = useSelector((state) => state.auth);
+    // Redux store에서 인증정보 가져오기
+    const { isLoggedIn, user, isAdmin } = useSelector((state) => state.auth);
+    // 로그인 여부 확인
     const isAuthenticated = isLoggedIn;
-    const isAdmin = user && user.admin === true;
+    // user.admin이 true일 경우 관리자로 간주합니다.
+    const admin = user && isAdmin === true;
 
     return (
         <Routes>
@@ -48,7 +51,7 @@ const RouteSetup = () => {
                 <Route
                     path="/admin"
                     element={
-                        <ProtectedRoute isAuthenticated={isAuthenticated} isAdmin={isAdmin}>
+                        <ProtectedRoute isAuthenticated={isAuthenticated} isAdmin={admin}>
                             <AdminPage />
                         </ProtectedRoute>
                     }

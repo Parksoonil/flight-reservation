@@ -2,3 +2,4 @@
 *.jar
 /build/
 /out/
+!**/gradle-wrapper.jar

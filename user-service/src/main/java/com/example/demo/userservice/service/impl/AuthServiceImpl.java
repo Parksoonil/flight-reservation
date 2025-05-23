@@ -17,7 +17,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
-import java.util.*;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Optional;
 import java.util.concurrent.TimeUnit;
 
 @Service
@@ -38,6 +40,7 @@ public class AuthServiceImpl implements AuthService {
         this.redisTemplate = redisTemplate;
     }
 
+    @Override
     public Map<String, Object> login(LoginRequest loginRequest, HttpServletResponse response) {
         Optional<UserEntity> userOptional = userService.findByEmail(loginRequest.getEmail());
         if (userOptional.isEmpty()) {
@@ -48,6 +51,9 @@ public class AuthServiceImpl implements AuthService {
             throw new AuthException("Invalid password", HttpStatus.UNAUTHORIZED);
         }
 
+        if (user.getDeletedAt() != null) {
+            throw new AuthException("삭제 요청된 사용자입니다.", HttpStatus.FORBIDDEN);
+        }
 
         // 액세스, 리프래시 토큰 생성
         String accessToken = accessTokenProvider.createToken(user.getEmail());
@@ -80,31 +86,60 @@ public class AuthServiceImpl implements AuthService {
         return responseBody;
     }
 
+    //로그아웃 V1
+//    @Override
+//    public String logout(HttpServletRequest request, HttpServletResponse response) {
+//        // 1. Authorization 헤더에서 Bearer 토큰 추출
+//        String accessToken = resolveToken(request);
+//        System.out.println("Access token: " + accessToken);
+//        if (accessToken == null || !accessTokenProvider.validateToken(accessToken)) {
+//            throw new AuthException("Invalid token", HttpStatus.BAD_REQUEST);
+//        }
+//        System.out.println(accessToken);
+//        // 2. Redis에서 액세스 및 refresh 토큰 삭제
+//        Boolean accessDeleted = redisTemplate.delete(accessToken);
+//        Boolean refreshDeleted = redisTemplate.delete(getRefreshTokenFromCookies(request));
+//        System.out.println("Access deleted: " + accessDeleted);
+//        System.out.println("Refresh deleted: " + refreshDeleted);
+//        if (Boolean.TRUE.equals(accessDeleted) && Boolean.TRUE.equals(refreshDeleted)) {
+//            // 3. HTTP 요청의 쿠키에서 refreshToken 쿠키 삭제 처리
+//            Cookie refreshTokenCookie = new Cookie("refreshToken", "");
+//            refreshTokenCookie.setPath("/");
+//            refreshTokenCookie.setMaxAge(0);
+//            response.addCookie(refreshTokenCookie);
+//
+//            return "Logout successful";
+//        } else {
+//            throw new AuthException("Invalid token", HttpStatus.BAD_REQUEST);
+//        }
+//    }
+
+    //로그아웃 V2
+    @Override
     public String logout(HttpServletRequest request, HttpServletResponse response) {
         // 1. Authorization 헤더에서 Bearer 토큰 추출
         String accessToken = resolveToken(request);
         System.out.println("Access token: " + accessToken);
-        if (accessToken == null || !accessTokenProvider.validateToken(accessToken)) {
-            throw new AuthException("Invalid token", HttpStatus.BAD_REQUEST);
-        }
-        System.out.println(accessToken);
-        // 2. Redis에서 액세스 및 refresh 토큰 삭제
-        Boolean accessDeleted = redisTemplate.delete(accessToken);
-        Boolean refreshDeleted = redisTemplate.delete(getRefreshTokenFromCookies(request));
-        System.out.println("Access deleted: " + accessDeleted);
-        System.out.println("Refresh deleted: " + refreshDeleted);
-        if (Boolean.TRUE.equals(accessDeleted) && Boolean.TRUE.equals(refreshDeleted)) {
-            // 3. HTTP 요청의 쿠키에서 refreshToken 쿠키 삭제 처리
-            Cookie refreshTokenCookie = new Cookie("refreshToken", "");
-            refreshTokenCookie.setPath("/");
-            refreshTokenCookie.setMaxAge(0);
-            response.addCookie(refreshTokenCookie);
 
-            return "Logout successful";
+        // 2. 토큰이 존재하고 유효하면 Redis에서 액세스/리프레시 토큰 삭제
+        if (accessToken != null && accessTokenProvider.validateToken(accessToken)) {
+            redisTemplate.delete(accessToken);
+            redisTemplate.delete(getRefreshTokenFromCookies(request));
+            System.out.println("Redis에서 토큰들을 삭제했습니다.");
         } else {
-            throw new AuthException("Invalid token", HttpStatus.BAD_REQUEST);
+            // 유효하지 않은 토큰인 경우에도 이미 로그아웃된 것으로 간주 (idempotent 처리)
+            System.out.println("토큰이 없거나 유효하지 않습니다. 이미 로그아웃된 상태로 간주합니다.");
         }
+
+        // 3. HTTP 쿠키에서 refreshToken 쿠키 삭제 처리
+        Cookie refreshTokenCookie = new Cookie("refreshToken", "");
+        refreshTokenCookie.setPath("/");
+        refreshTokenCookie.setMaxAge(0);
+        response.addCookie(refreshTokenCookie);
+
+        return "Logout successful";
     }
+
 
     private String getRefreshTokenFromCookies(HttpServletRequest request) {
         Cookie[] cookies = request.getCookies();
@@ -121,6 +156,7 @@ public class AuthServiceImpl implements AuthService {
     }
 
     // Authorization 헤더에서 토큰 정보 추출 (Bearer 토큰)
+    @Override
     public String resolveToken(HttpServletRequest request) {
         String bearerToken = request.getHeader("Authorization");
         if (bearerToken != null && bearerToken.startsWith("Bearer ")) {
@@ -128,6 +164,45 @@ public class AuthServiceImpl implements AuthService {
         }
         return null;
     }
+
+
+    /**
+     * JWT 토큰의 subject(예, 이메일 등)를 추출하여 반환합니다.
+     *
+     * @param token JWT 토큰 문자열
+     * @return 토큰의 subject 값 (예: 사용자 이메일)
+     */
+    @Override
+    public String getEmailFromToken(String token) {
+        return accessTokenProvider.getClaimsFromToken(token).getSubject();
+    }
+    /**
+     * 주어진 토큰에서 userid 값을 추출합니다.
+     * 토큰 생성 시 claims.put("userid", user.getId())로 저장되었으며,
+     * user.getId()의 타입에 맞게 반환 타입을 조정해야 합니다.
+     *
+     * 예시에서는 Long 타입의 사용자 아이디로 가정합니다.
+     */
+    @Override
+    public Long getUserIdFromToken(String token) {
+        Claims claims = accessTokenProvider.getClaimsFromToken(token);
+        // user id가 없을 경우 null이 반환될 수 있습니다.
+        return claims.get("userid", Long.class);
+    }
+
+    /**
+     * 주어진 토큰에서 admin 여부를 추출합니다.
+     * 토큰 생성 시 claims.put("admin", true)로 저장되었으며,
+     * Boolean 값으로 반환됩니다.
+     */
+    @Override
+    public Boolean isAdminFromToken(String token) {
+        Claims claims = accessTokenProvider.getClaimsFromToken(token);
+        // admin 값이 없으면 기본적으로 false로 간주할 수 있습니다.
+        Boolean isAdmin = claims.get("admin", Boolean.class);
+        return (isAdmin != null) ? isAdmin : false;
+    }
+
     /**
      * HTTPOnly 쿠키에 저장된 refresh 토큰을 검증 후, 새로운 액세스 토큰을 발급합니다.
      *
@@ -135,6 +210,7 @@ public class AuthServiceImpl implements AuthService {
      * @return 새롭게 발급된 액세스 토큰
      * @throws ResponseStatusException refresh 토큰이 없거나 유효하지 않을 경우 예외 발생 (401)
      */
+    @Override
     public String refreshAccessToken(String refreshToken) {
         // refresh 토큰이 없으면 401 에러 발생
         if (refreshToken == null || refreshToken.isEmpty()) {

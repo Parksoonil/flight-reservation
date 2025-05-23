@@ -7,7 +7,9 @@
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/flight-reservation-gateway.test.iml" filepath="$PROJECT_DIR$/.idea/modules/flight-reservation-gateway.test.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/flight-reservation-server.main.iml" filepath="$PROJECT_DIR$/.idea/modules/flight-reservation-server.main.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/flight-reservation-server.test.iml" filepath="$PROJECT_DIR$/.idea/modules/flight-reservation-server.test.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/flight-service.main.iml" filepath="$PROJECT_DIR$/.idea/modules/flight-service.main.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/flight-service.test.iml" filepath="$PROJECT_DIR$/.idea/modules/flight-service.test.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/reservation-service.main.iml" filepath="$PROJECT_DIR$/.idea/modules/reservation-service.main.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/reservation-service.test.iml" filepath="$PROJECT_DIR$/.idea/modules/reservation-service.test.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/user-service.main.iml" filepath="$PROJECT_DIR$/.idea/modules/user-service.main.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/user-service.test.iml" filepath="$PROJECT_DIR$/.idea/modules/user-service.test.iml" />

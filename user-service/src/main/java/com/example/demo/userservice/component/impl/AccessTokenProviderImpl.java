@@ -1,18 +1,15 @@
 package com.example.demo.userservice.component.impl;
 
 import com.example.demo.userservice.component.TokenProvider;
-import com.example.demo.userservice.entity.UserEntity;
 import com.example.demo.userservice.repository.UserRepository;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.security.Keys;
-import org.apache.catalina.User;
 import org.springframework.stereotype.Component;
 
 import java.security.Key;
 import java.util.Date;
-import java.util.List;
 
 @Component("accessTokenProvider")
 public class AccessTokenProviderImpl implements TokenProvider {

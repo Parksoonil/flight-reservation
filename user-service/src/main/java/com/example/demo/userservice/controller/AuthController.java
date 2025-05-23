@@ -3,6 +3,7 @@ package com.example.demo.userservice.controller;
 import com.example.demo.userservice.dto.LoginRequest;
 import com.example.demo.userservice.exception.AuthException;
 import com.example.demo.userservice.service.AuthService;
+import com.example.demo.userservice.service.UserService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.http.ResponseEntity;
@@ -16,9 +17,11 @@ import java.util.Map;
 public class AuthController {
 
     private final AuthService authService;
+    private final UserService userService;
 
-    public AuthController(AuthService authService) {
+    public AuthController(AuthService authService, UserService userService) {
         this.authService = authService;
+        this.userService = userService;
     }
 
     @PostMapping("/login")
@@ -41,6 +44,7 @@ public class AuthController {
             return ResponseEntity.status(e.getStatus()).body(e.getMessage());
         }
     }
+
 
     /**
      * HTTPOnly refresh 토큰을 이용하여 새 액세스 토큰을 발급합니다.

@@ -5,6 +5,7 @@ const initialState = {
     email: null,
     accessToken: null,
     user: null,
+    isAdmin: false,
 };
 
 const authSlice = createSlice({
@@ -12,26 +13,30 @@ const authSlice = createSlice({
     initialState,
     reducers: {
         login: (state, action) => {
-            const { email, accessToken, user } = action.payload;
+            const { email, accessToken, userId, admin } = action.payload;
 
             state.isLoggedIn = true;
             state.email = email;
             state.accessToken = accessToken;
-            state.user = user;
+            state.user = userId;
+            state.isAdmin = admin || false;
 
             localStorage.setItem("accessToken", accessToken);
             localStorage.setItem("email", email);
-            localStorage.setItem("user", JSON.stringify(user));
+            localStorage.setItem("user", JSON.stringify(userId));
+            localStorage.setItem("isAdmin", JSON.stringify(admin));
         },
         logout: (state) => {
             state.isLoggedIn = false;
             state.email = null;
             state.accessToken = null;
             state.user = null;
+            state.isAdmin = false;
 
             localStorage.removeItem("accessToken");
             localStorage.removeItem("email");
             localStorage.removeItem("user");
+            localStorage.removeItem("isAdmin");
         },
     },
 });

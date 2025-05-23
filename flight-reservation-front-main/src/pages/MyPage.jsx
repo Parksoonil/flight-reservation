@@ -19,30 +19,33 @@ function MyPage() {
   const [selectedMenu, setSelectedMenu] = useState("summary");
   const navigate = useNavigate();
 
+  // Redux의 auth slice에서 user 정보를 가져옵니다.
+  const userId = useSelector((state) => state.auth.user);
+
+  if (!userId) {
+    console.error("사용자 정보가 없습니다.");
+    navigate("/login");
+    return null;
+  }
+
   useEffect(() => {
+    // accessToken이 없으면 로그인 페이지로 이동합니다.
     if (!accessToken) {
       navigate("/login");
       return;
     }
 
-    let userid;
-    try {
-      const decoded = jwtDecode(accessToken);
-      userid = decoded.userid;
-    } catch (error) {
-      console.error("토큰 디코딩 실패:", error);
-      navigate("/login");
-      return;
-    }
-
+    // 즉시 실행하는 async 함수를 사용하여 사용자 및 예약 정보를 가져옵니다.
     (async () => {
       try {
-        const { data: userDataRaw } = await apiClient.get(`api/users/id/${userid}`);
+        // 사용자 정보를 userid 기준으로 API 호출
+        const { data: userDataRaw } = await apiClient.get(`api/users/id/${userId}`);
         const userData = Array.isArray(userDataRaw) ? userDataRaw[0] : userDataRaw;
-        setUser(userData);
-
+        if (userData) {
+          setUser(userData);
+        }
       } catch (error) {
-        console.error("데이터 로딩 실패:", error);
+        console.error("사용자 정보 또는 예약을 불러오는 데 실패했습니다.", error);
       }
     })();
   }, [accessToken, navigate]);
@@ -66,22 +69,21 @@ function MyPage() {
     }
 
     try {
-      const config = {
-        headers: {
-          Authorization: `Bearer ${accessToken}`,
-        },
-        withCredentials: true, // 만약 백엔드가 refreshToken을 쿠키로 관리하는 경우 필요
-      };
+      // 회원 탈퇴 API 호출 (소프트 딜리트 또는 실제 삭제)
+      await apiClient.delete(`/api/users/${user.id}`);
+      alert("회원 탈퇴 처리가 완료되었습니다.");
 
-      await apiClient.delete(`http://localhost:8443/api/users/${user.id}`, config);
-      await apiClient.post(`http://localhost:8443/api/users/logout`, {}, config);
+      // 탈퇴 후 백엔드 로그아웃 엔드포인트 호출 (HttpOnly refresh token 만료)
+      await apiClient.post("/api/users/logout");
+
+      // 클라이언트 측 Redux 로그아웃 처리 (accessToken 등 제거)
       dispatch(logout());
 
-      alert("회원 탈퇴 완료");
+      // 탈퇴 후 로그인 페이지로 이동 (또는 원하는 다른 페이지로 이동)
       navigate("/login");
     } catch (error) {
-      console.error("회원 탈퇴 실패:", error.response || error);
-      alert("회원 탈퇴 실패");
+      console.error("회원 탈퇴에 실패했습니다.", error);
+      alert("회원 탈퇴에 실패했습니다. 다시 시도해주세요.");
     }
   };
 

@@ -2,8 +2,6 @@ package com.example.demo.userservice.component;
 
 import io.jsonwebtoken.Claims;
 
-import java.util.List;
-
 public interface TokenProvider {
     /**
      * 지정된 이메일과 역할 정보를 바탕으로 JWT를 생성합니다.

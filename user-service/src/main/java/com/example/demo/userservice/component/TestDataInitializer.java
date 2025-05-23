@@ -1,13 +1,13 @@
 package com.example.demo.userservice.component;
 
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-
 import com.example.demo.userservice.entity.UserEntity;
 import com.example.demo.userservice.repository.UserRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
-import org.springframework.beans.factory.annotation.Autowired;
+
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Component
 public class TestDataInitializer implements CommandLineRunner {

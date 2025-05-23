@@ -1,7 +1,6 @@
 import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { useState } from "react";
-import { jwtDecode } from "jwt-decode";
 import apiClient from "../apiClient.jsx";
 import { login } from "../store/authSlice.js";
 
@@ -16,26 +15,49 @@ function Login() {
     const [error, setError] = useState('');
 
     const handleLogin = async (e) => {
-        console.log("BASE URL:", apiClient.defaults.baseURL);
         e.preventDefault();
         try {
-            // 서버 요청: 이제 사용자 정보 대신 accessToken만 반환한다고 가정
-            const res = await apiClient.post(
-                "/api/users/login",
-                { email, password }
-            );
-            const { accessToken } = res.data;
+            // 로그인 API 호출: 백엔드가 accessToken만 반환합니다.
+            const loginResponse = await apiClient.post("/api/users/login", {
+                email,
+                password
+            });
+            const { accessToken } = loginResponse.data;
 
-            const decoded = jwtDecode(accessToken);
-            const userEmail = decoded.sub; // 토큰 발급 시 setSubject(email) 했던 값
-            console.log("BASE URL:", apiClient.defaults.baseURL);
-            // Redux를 통해 로그인 상태 업데이트 (필요한 경우 decoded 전체를 저장해도 됨)
-            dispatch(login({ email: userEmail, accessToken, user: decoded }));
+            // 백엔드의 /api/token-info 엔드포인트 호출하여 토큰에 담긴 사용자 정보를 받아옵니다.
+            const tokenInfoResponse = await apiClient.get("/api/users/token-info", {
+                headers: {
+                    Authorization: `Bearer ${accessToken}`
+                }
+            });
+            console.log(tokenInfoResponse.data);
+            // 백엔드에서 받은 토큰 정보에는 email, userid, admin 값이 포함됩니다.
+            const { email: userEmail, userId, admin } = tokenInfoResponse.data;
+            // Redux에 로그인 정보(토큰, 사용자 정보)를 저장합니다.
+            dispatch(
+                login({
+                    email: userEmail,
+                    accessToken,
+                    userId,
+                    admin
+                })
+            );
 
             alert("로그인 성공");
             navigate("/");
         } catch (err) {
             console.error("로그인 오류", err);
+
+            // 백엔드에서 삭제 요청된 사용자에 대해 403 상태와 지정된 메시지 반환한 경우
+            if (
+                err.response &&
+                err.response.status === 403 &&
+                err.response.data === "삭제 요청된 사용자입니다."
+            ) {
+                alert("삭제 요청된 사용자입니다. 관리자에게 문의해 주세요.");
+                return;
+            }
+            // 그 외 인증 실패 시 에러 메시지 출력
             setError("이메일 또는 비밀번호를 확인해 주세요");
         }
     };
@@ -48,7 +70,7 @@ function Login() {
                     <div className="login-form">
                         <h1 onClick={() => navigate("/")} className="login-logo">
                             Airplanit
-                        </h1>   
+                        </h1>
                         <form onSubmit={handleLogin}>
                             <label htmlFor="email">이메일</label>
                             <input
