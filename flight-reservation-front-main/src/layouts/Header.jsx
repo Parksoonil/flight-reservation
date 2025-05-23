@@ -8,7 +8,7 @@ function Header() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const isLoggedIn = useSelector((state) => state.auth.isLoggedIn);
-  const isAdmin = useSelector((state) => state.auth.user?.admin);
+  const isAdmin = useSelector((state) => state.auth.isAdmin);
 
   const handleLogout = async () => {
     try {
