@@ -14,6 +14,7 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.ValueOperations;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
@@ -29,15 +30,18 @@ public class AuthServiceImpl implements AuthService {
     private final TokenProvider accessTokenProvider;
     private final TokenProvider refreshTokenProvider;
     private final RedisTemplate<String, Object> redisTemplate;
+    private final PasswordEncoder passwordEncoder;
 
     public AuthServiceImpl(UserService userService,
                            @Qualifier("accessTokenProvider") TokenProvider accessTokenProvider,
                            @Qualifier("refreshTokenProvider") TokenProvider refreshTokenProvider,
-                           RedisTemplate<String, Object> redisTemplate) {
+                           RedisTemplate<String, Object> redisTemplate,
+                           PasswordEncoder passwordEncoder) {
         this.userService = userService;
         this.accessTokenProvider = accessTokenProvider;
         this.refreshTokenProvider = refreshTokenProvider;
         this.redisTemplate = redisTemplate;
+        this.passwordEncoder = passwordEncoder;
     }
 
     @Override
@@ -47,7 +51,7 @@ public class AuthServiceImpl implements AuthService {
             throw new AuthException("Invalid email", HttpStatus.UNAUTHORIZED);
         }
         UserEntity user = userOptional.get();
-        if (!user.getPassword().equals(loginRequest.getPassword())) {
+        if (!passwordEncoder.matches(loginRequest.getPassword(), user.getPassword())) {
             throw new AuthException("Invalid password", HttpStatus.UNAUTHORIZED);
         }
 

@@ -5,6 +5,7 @@ import com.example.demo.userservice.entity.UserEntity;
 import com.example.demo.userservice.repository.UserRepository;
 import com.example.demo.userservice.service.UserService;
 import org.springframework.scheduling.annotation.Scheduled;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -14,8 +15,11 @@ import java.util.Optional;
 @Service
 public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
-    public UserServiceImpl(UserRepository userRepository) {
+    private final PasswordEncoder passwordEncoder;
+
+    public UserServiceImpl(UserRepository userRepository, PasswordEncoder passwordEncoder) {
         this.userRepository = userRepository;
+        this.passwordEncoder = passwordEncoder;
     }
 
     @Override
@@ -60,16 +64,19 @@ public class UserServiceImpl implements UserService {
             return false;
         }
         UserEntity user = optionalUser.get();
-        user.setPassword(newPassword);
+        String encodedPassword = passwordEncoder.encode(newPassword);
+        user.setPassword(encodedPassword);
         userRepository.save(user);
         return true;
     }
 
+
     @Override
     public UserEntity createUser(UserEntity user) {
+        // 비밀번호 암호화
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
         return userRepository.save(user);
     }
-
     @Override
     public UserEntity updateUser(UserEntity user, UserUpdateDTO userDTO) {
         user.setUserFirstName(userDTO.getUserFirstName());
