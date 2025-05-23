@@ -3,7 +3,7 @@ HELP.md
 build/
 !**/src/main/**/build/
 !**/src/test/**/build/
-!**/gradle-wrapper.jar
+
 ### STS ###
 .apt_generated
 .classpath
@@ -37,5 +37,6 @@ out/
 
 # .gitignore 파일에 추가
 *.jar
+!**/gradle-wrapper.jar
 /build/
 /out/
