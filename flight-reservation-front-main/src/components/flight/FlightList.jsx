@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
 import './FlightList.css';
+import apiClient from "../../apiClient.jsx";
 
 function FlightList({ filters, onSelectedFlights, selectedFlights = [] }) {
     const [oneWayFlights, setOneWayFlights] = useState([]);
@@ -21,10 +22,10 @@ function FlightList({ filters, onSelectedFlights, selectedFlights = [] }) {
 
                     const isRound = filters.tripType === "round";
                     const uri = isRound
-                        ? "http://localhost:8443/api/flights/search/split"
-                        : "http://localhost:8443/api/flights/search";
+                        ? "/api/flights/search/split"
+                        : "/api/flights/search";
 
-                    const res = await axios.get(uri, {
+                    const res = await apiClient.get(uri, {
                         params: {
                             ...cleanParams,
                             page,
