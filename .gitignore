@@ -1,4 +1,5 @@
 # .gitignore 파일에 추가
+.env
 *.jar
 /build/
 /out/
