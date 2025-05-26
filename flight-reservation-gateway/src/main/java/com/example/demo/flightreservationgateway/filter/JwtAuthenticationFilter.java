@@ -28,7 +28,9 @@ public class JwtAuthenticationFilter implements GlobalFilter {
         System.out.println("chain filter 접근");
         String path = exchange.getRequest().getPath().toString();
         System.out.println("path : " + path);
-        List<String> whitelist = List.of("/api/users/login", "/api/users/signup", "/api/users/refresh", "/api/flight/**", "/api/autocomplete/**");
+        List<String> whitelist = List.of("/api/users/login", "/api/users/signup", "/api/users/refresh", "/api/flight/**",
+                "/api/autocomplete/**", "/api/users/mail/send-verification", "/api/users/mail/verify-code", "/api/users/find-id", "/api/users/reset-password",
+                "/api/users/email/**", "/api/users");
         if (whitelist.contains(path)) {
             return chain.filter(exchange);
         }

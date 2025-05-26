@@ -201,15 +201,6 @@ const UserManagement = ({ users, setUsers }) => {
                         />
                     </div>
                     <div className="user-management__form-group">
-                        <label>비밀 번호</label>
-                        <input
-                            type="text"
-                            value={editingUser.password}
-                            onChange={handleFieldChange("password")}
-                            placeholder="Password"
-                        />
-                    </div>
-                    <div className="user-management__form-group">
                         <label>핸드폰 번호</label>
                         <input
                             type="text"
@@ -278,7 +269,6 @@ const UserManagement = ({ users, setUsers }) => {
                         <th className="user-management__table-header">First Name</th>
                         <th className="user-management__table-header">Last Name</th>
                         <th className="user-management__table-header">Email</th>
-                        <th className="user-management__table-header">비밀 번호</th>
                         <th className="user-management__table-header">핸드폰 번호</th>
                         <th className="user-management__table-header">생일</th>
                         <th className="user-management__table-header">가입일</th>
@@ -295,7 +285,6 @@ const UserManagement = ({ users, setUsers }) => {
                             <td className="user-management__table-cell">{user.userFirstName}</td>
                             <td className="user-management__table-cell">{user.userLastName}</td>
                             <td className="user-management__table-cell">{user.email}</td>
-                            <td className="user-management__table-cell">{user.password}</td>
                             <td className="user-management__table-cell">{user.phone}</td>
                             <td className="user-management__table-cell">{user.birthday}</td>
                             <td className="user-management__table-cell">{formatDateTime(user.createdAt)}</td>
