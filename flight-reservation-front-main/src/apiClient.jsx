@@ -5,10 +5,16 @@ const apiClient = axios.create({
     withCredentials: true,
 });
 
+// 저장된 토큰을 가져오는 함수
+const getToken = () => localStorage.getItem('accessToken');
+
 // HTTPOnly 쿠키를 사용하므로, 클라이언트에서 직접 토큰을 다루지 않습니다.
 // 따라서 기존의 localStorage에서 토큰을 읽어 Authorization 헤더에 추가하는 인터셉터는 삭제합니다.
 apiClient.interceptors.request.use((config) => {
-    // 별도로 헤더를 조작할 필요가 없으므로 그대로 config를 반환합니다.
+    const token = getToken();
+    if (token) {
+        config.headers.Authorization = `Bearer ${token}`;
+    }
     return config;
 });
 apiClient.interceptors.response.use(

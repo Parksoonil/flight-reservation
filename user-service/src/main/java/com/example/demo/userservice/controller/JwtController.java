@@ -18,6 +18,7 @@ public class JwtController {
     public JwtController(AuthService authService) {
         this.authService = authService;
     }
+
     @GetMapping("/decodeEmail")
     public ResponseEntity<String> decodeToken(HttpServletRequest request) {
         String token = authService.resolveToken(request);

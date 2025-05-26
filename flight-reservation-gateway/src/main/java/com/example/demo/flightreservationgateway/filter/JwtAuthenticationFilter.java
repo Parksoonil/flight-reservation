@@ -25,13 +25,15 @@ public class JwtAuthenticationFilter implements GlobalFilter {
 
     @Override
     public Mono<Void> filter(ServerWebExchange exchange, GatewayFilterChain chain) {
+        System.out.println("chain filter 접근");
         String path = exchange.getRequest().getPath().toString();
-        List<String> whitelist = List.of("/api/users/login", "/api/users/signup", "/api/users/refresh");
+        System.out.println("path : " + path);
+        List<String> whitelist = List.of("/api/users/login", "/api/users/signup", "/api/users/refresh", "/api/flight/**", "/api/autocomplete/**");
         if (whitelist.contains(path)) {
             return chain.filter(exchange);
         }
-
         String authHeader = exchange.getRequest().getHeaders().getFirst(HttpHeaders.AUTHORIZATION);
+        System.out.println("authHeader : " + authHeader);
         if (authHeader == null || !authHeader.startsWith("Bearer ")) {
             return unauthorized(exchange);
         }
@@ -45,7 +47,9 @@ public class JwtAuthenticationFilter implements GlobalFilter {
         ServerHttpRequest newRequest = exchange.getRequest().mutate()
                 .header("X-User-Email", email)
                 .build();
-
+        System.out.println("newRequest : " + newRequest);
+        System.out.println("newRequest.header : " + newRequest.getHeaders());
+        System.out.println(exchange.mutate().request(newRequest).build());
         return chain.filter(exchange.mutate().request(newRequest).build());
     }
 

@@ -10,6 +10,7 @@ import jakarta.annotation.PostConstruct;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
+import java.nio.charset.StandardCharsets;
 import java.security.Key;
 import java.util.Base64;
 import java.util.Date;
@@ -30,8 +31,8 @@ public class AccessTokenProviderImpl implements TokenProvider {
 
     @PostConstruct
     public void init() {
-        byte[] decodedKey = Base64.getEncoder().encode(jwtSecret.getBytes());
-        this.key = Keys.hmacShaKeyFor(decodedKey); // io.jsonwebtoken.security.Keys
+        byte[] keyBytes = jwtSecret.getBytes(StandardCharsets.UTF_8);
+        this.key = Keys.hmacShaKeyFor(keyBytes);
     }
 
     @Override
@@ -49,7 +50,7 @@ public class AccessTokenProviderImpl implements TokenProvider {
                 .setClaims(claims)
                 .setIssuedAt(now)
                 .setExpiration(validity)
-                .signWith(SignatureAlgorithm.HS512, jwtSecret)
+                .signWith(key, SignatureAlgorithm.HS256)
                 .compact();
     }
 
@@ -61,9 +62,11 @@ public class AccessTokenProviderImpl implements TokenProvider {
     @Override
     public boolean validateToken(String token) {
         try {
-            Jwts.parser().setSigningKey(jwtSecret).parseClaimsJws(token);
+            Jwts.parser().setSigningKey(key).parseClaimsJws(token);
+            System.out.println("validate access token : " + token);
             return true;
         } catch (Exception e) {
+            System.out.println("failed to validate access token : " + token);
             return false;
         }
     }
@@ -71,7 +74,7 @@ public class AccessTokenProviderImpl implements TokenProvider {
     @Override
     public String getEmailFromToken(String token) {
         return Jwts.parser()
-                .setSigningKey(jwtSecret)
+                .setSigningKey(key)
                 .parseClaimsJws(token)
                 .getBody()
                 .getSubject();
@@ -80,7 +83,7 @@ public class AccessTokenProviderImpl implements TokenProvider {
     @Override
     public Claims getClaimsFromToken(String token) {
         Claims claims = Jwts.parser()
-                .setSigningKey(jwtSecret) // 비밀키를 바이트 배열로 전달
+                .setSigningKey(key) // 비밀키를 바이트 배열로 전달
                 .parseClaimsJws(token)
                 .getBody();
         return claims;
