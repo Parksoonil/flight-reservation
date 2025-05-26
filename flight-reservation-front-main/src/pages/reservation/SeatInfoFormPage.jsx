@@ -1,6 +1,6 @@
 import styles from '../../styles/SeatInfoFormPage.module.css';
-import {useLocation, useNavigate, useParams} from "react-router-dom";
-import {useEffect, useState} from "react";
+import { useLocation, useNavigate, useParams } from "react-router-dom";
+import { useEffect, useState } from "react";
 import apiClient from "../../apiClient.jsx";
 
 

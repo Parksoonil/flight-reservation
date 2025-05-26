@@ -1,11 +1,17 @@
-import {Outlet, useLocation } from "react-router-dom";
+import { Outlet, useLocation } from "react-router-dom";
 import StepProgressBar from "../components/StepProgressBar.jsx";
 
 import "./ReservationLayout.css"
 
 
 function ReservationLayout() {
-    const steps = ['정보 확인', '좌석 선택', '추가정보 입력', '최종 확인', '완료'];
+    const steps = [
+        { label: '정보 확인', icon: '/images/rsvplane.png' },
+        { label: '좌석 선택', icon: '/images/rsvseat.png' },
+        { label: '추가정보 입력', icon: '/images/rsvuser.png' },
+        { label: '최종 확인', icon: '/images/rsvcheck.png' },
+        { label: '완료', icon: '/images/rsvticket.png' },
+    ];
     const location = useLocation();
 
     const getStepFromPath = (pathname) => {
@@ -21,10 +27,11 @@ function ReservationLayout() {
 
     return (
         <div className="reservation-layout">
-            <h1>항공편 예매</h1>
             <div className="reservation-content">
                 <StepProgressBar steps={steps} currentStep={currentStep} />
+                <div className="reservation-outlet">
                 <Outlet />
+                </div>
             </div>
         </div>
     );

@@ -48,7 +48,8 @@ const PlaceByRegion = () => {
 
                 setLoading(false);
             } catch (err) {
-                setError(`데이터를 불러오는 데 실패했습니다: ${err.message}`);
+                setError("데이터를 불러오는 데 실패했습니다. 다시 시도해주세요");
+                console.log(`오류: ${err.message}`);
                 setLoading(false);
             }
         };

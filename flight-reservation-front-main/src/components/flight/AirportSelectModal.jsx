@@ -1,11 +1,22 @@
-import {useEffect, useState} from "react";
+import { useEffect, useState } from "react";
+import { useLocation } from "react-router-dom";
 import apiClient from "../../apiClient.jsx";
+import "./AirportSelectModal.css";
 
-import "./AirportSelectModal.css"
-
-const AirportSelectModal = ({ onClose, onSelect }) => {
+const AirportSelectModal = ({ onClose, onSelect, style }) => {
     const [query, setQuery] = useState("");
     const [results, setResults] = useState([]);
+    const location = useLocation();
+
+    const isMapPage = location.pathname === "/map";
+
+    const MapPageStyle = {
+        top: "20vh",
+        left: "30vw",
+        backgroundColor: "rgba(255, 255, 255, 0.75)",
+    };
+
+    const modalStyle = isMapPage ? MapPageStyle : style;
 
     useEffect(() => {
         const delayDebounce = setTimeout(() => {
@@ -26,8 +37,8 @@ const AirportSelectModal = ({ onClose, onSelect }) => {
     }, [query]);
 
     return (
-        <div className="modal-overlay">
-            <div className="modal-box">
+        <div>
+            <div className="modal-box" style={modalStyle}>
                 <div className="modal-header">
                     <span>✈ 공항 선택</span>
                     <button className="modal-close-btn" onClick={onClose}>✕</button>

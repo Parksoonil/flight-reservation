@@ -22,6 +22,7 @@ import SeatConfirmationPage from "../pages/reservation/SeatConfirmationPage.jsx"
 import ReservationComplete from "../pages/reservation/ReservationComplete.jsx";
 import Payment from "../pages/reservation/Payment.jsx";
 import ReservationLayout from "../layouts/ReservationLayout.jsx";
+import ErrorPage from "../pages/ErrorPage.jsx";
 
 const RouteSetup = () => {
     // Redux store에서 인증정보 가져오기
@@ -40,6 +41,7 @@ const RouteSetup = () => {
                 <Route path="/rPlace" element={<PlaceByRegion />} />
                 <Route path="/sPlace" element={<PlaceBySearch />} />
                 <Route path="/help" element={<HelpPage />} />
+                <Route path="*" element={<ErrorPage  />} />
                 <Route element={<ReservationLayout/>}>
                     <Route path="/flight/:id" element={<FlightDetail />} />
                     <Route path="/loading" element={<ReservationPage />} />

@@ -11,6 +11,8 @@ function Header() {
   const isAdmin = useSelector((state) => state.auth.isAdmin);
 
   const handleLogout = async () => {
+    const confirmed = window.confirm("로그아웃 하시겠습니까?");
+    if (!confirmed) return;
     try {
       // 로컬 스토리지나 Redux에서 accessToken 가져오기 (예시)
       const accessToken = localStorage.getItem("accessToken");

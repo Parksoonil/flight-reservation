@@ -23,7 +23,7 @@ function App() {
           headers: { Authorization: `Bearer ${token}` },
         });
         const { email, userId, admin } = tokenInfoResponse.data;
-        console.log(tokenInfoResponse.data)
+
         // Redux에 로그인 정보 저장
         dispatch(
             login({
@@ -35,7 +35,6 @@ function App() {
         );
       } catch (error) {
         // 토큰 정보 요청 실패 시 (예: 401 Unauthorized) 토큰 만료 등의 이유로 refresh 요청 실행
-        console.log(error.response);
         if (error.response && error.response.status === 401) {
           try {
             // refresh 엔드포인트 호출하여 새로운 토큰 발급 요청

@@ -1,6 +1,7 @@
 .flight-page-container {
     padding: 5vh 5vw 10vh 5vw;
     background: linear-gradient(135deg, #b2e1ff, #ffffff);
+    height: 200vh;
 }
 
 .flight-page-selection-wrapper {

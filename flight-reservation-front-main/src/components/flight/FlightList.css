@@ -1,49 +1,50 @@
+/* 전체 레이아웃 */
 .flight-list {
     display: grid;
     grid-template-columns: 1fr;
-    gap: 20px;
-    padding: 2rem;
+    gap: 24px;
+    padding: 2rem 1.5rem;
+    max-width: 1200px;
     margin: 0 auto;
 }
 
-/* ✅ 왕복일 경우 더 넓게 보이도록 */
+/* 왕복일 경우 두 컬럼으로 표시 */
 .flight-list.wide-mode {
+    display: flex;
+    gap: 40px;
+    justify-content: space-between;
 }
 
-
+/* 항공편 카드 기본 스타일 */
 .flight-card {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    border-radius: 16px;
-    padding: 1.5rem 2rem;
-    backdrop-filter: blur(20px);
-    -webkit-backdrop-filter: blur(15px);
-    background-color: white;
-    border: 1px solid rgba(255, 255, 255, 0.15);
-    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
-    color: black;
+    border-radius: 12px;
+    padding: 1.5rem;
+    background-color: #ffffff;
+    border: 1px solid #e0e0e0;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.05);
+    transition: all 0.3s ease;
+    cursor: pointer;
 }
-
 
 .flight-card:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 12px 32px rgba(0, 0, 0, 0.2);
-    background-color: #e1ebff;
-    border: 1px solid rgba(255, 255, 255, 0.25);
-    backdrop-filter: blur(30px);
+    background-color: #f9fbff;
+    border-color: #007bff;
+    box-shadow: 0 8px 24px rgba(0, 123, 255, 0.1);
 }
 
-
+/* 섹션 배치 */
 .section {
     display: flex;
     flex-direction: column;
     justify-content: center;
 }
 
-.section-left, .section-right {
-    width: 25%;
+.section-left,
+.section-right {
+    width: 22%;
     text-align: center;
 }
 
@@ -54,215 +55,135 @@
     align-items: center;
 }
 
+/* 중앙 타임 정보 구성 */
 .center-twin {
     display: flex;
     flex-direction: row;
     justify-content: space-between;
-    align-items: flex-start;  /* ← 상단 기준 정렬 */
+    align-items: center;
     gap: 2rem;
 }
 
+/* 텍스트 스타일링 */
 .section-left h3 {
-    font-size: 1.2rem;
-    font-weight: 700;
-    color: #0066cc;
+    font-size: 1rem;
+    font-weight: 600;
+    color: #007bff;
+    margin-bottom: 0.3rem;
 }
 
 .section-left p,
 .section-right p {
-    font-size: 0.9rem;
-    color: #444;
-}
-
-.center-top {
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    gap: 2rem;
-    justify-content: center;
-}
-
-.center-bottom {
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-    width: 100%;
-    font-size: 0.9rem;
-    color: #444;
-    padding: 0 2rem;
+    font-size: 0.85rem;
+    color: #555;
+    margin: 0.3rem 0;
 }
 
 .time-info {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
     text-align: center;
 }
 
 .time {
-    font-size: 1.2rem;
-    font-weight: bold;
-    color: #333;
-}
-
-
-.flight-duration {
-    font-size: 0.95rem;
-    font-weight: 600;
-    color: #333;
-}
-
-.price {
     font-size: 1.1rem;
-    font-weight: 700;
-    color: #ff4d4f;
-    margin-top: 8px;
-}
-
-.seats {
-    font-size: 0.9rem;
-    color: #666;
+    font-weight: 600;
+    color: #111;
 }
 
 .location {
-    font-size: 0.9rem;
+    font-size: 0.85rem;
     color: #555;
-    margin-top: 0.2rem;
 }
 
 .duration-info {
-    display: flex;
-    align-items: center;
-    justify-content: center;
     font-size: 0.9rem;
-    font-weight: bold;
-    color: #666;
+    color: #444;
+    font-weight: 500;
+    text-align: center;
     min-width: 100px;
 }
 
-.slide-detail {
-    max-height: 0;
-    overflow: hidden;
-    transition: max-height 0.5s ease-in-out, padding 0.4s;
-    background-color: #f9fcff;
-    border-top: 2px solid #d0e9ff;
-    border-radius: 0 0 12px 12px;
+/* 가격 및 좌석 */
+.price {
+    font-size: 1.2rem;
+    font-weight: 700;
+    color: #ff3e3e;
 }
 
-.slide-detail.open {
-    max-height: 300px;
-    padding: 1.5rem 2rem;
+.seats {
+    font-size: 0.85rem;
+    color: #666;
 }
 
-.flight-detail-inner {
-    text-align: center;
-}
-
-.flight-detail-inner .destination {
-    font-size: 1.6rem;
-    font-weight: bold;
-    color: #2c3e50;
-    margin-bottom: 0.5rem;
-}
-
-.flight-detail-inner p {
-    font-size: 1rem;
-    margin: 0.4rem 0;
-    color: #333;
-}
-
-.reserve-button {
-    margin-top: 1rem;
-    padding: 0.5rem 1.2rem;
-    background-color: #0077ff;
-    color: white;
-    border: none;
-    border-radius: 8px;
-    font-size: 1rem;
-    cursor: pointer;
-}
-
-.reserve-button:hover {
-    background-color: #005fcc;
-}
-
-
-/* 왕복일경우 열 방식으로 배치 */
+/* 왕복 항공편 컬럼 */
 .round-trip-columns {
     display: flex;
-    justify-content: space-between;
-    gap: 40px;
-    width: 100%;
-    text-align: center;
+    flex: 1;
+    gap: 32px;
 }
 
 .round-trip-columns .column {
     flex: 1;
     display: flex;
     flex-direction: column;
-    gap: 16px;
+    gap: 20px;
 }
 
+/* 선택된 항공편 카드 */
+.flight-card.selected {
+    background-color: #e6f2ff;
+    border: 2px solid #007bff;
+}
 
+/* 비활성화된 항공편 카드 */
+.flight-card.disabled {
+    opacity: 0.5;
+    pointer-events: none;
+}
+
+/* 선택된 항공편 박스 */
 .selected-flights-box {
-    background: linear-gradient(to right, #e3f2fd, #ffffff);
-    border: 2px solid #90caf9;
-    border-radius: 16px;
-    padding: 1.5rem 2rem;
+    background: #f4faff;
+    border: 1px solid #b3d8ff;
+    border-radius: 12px;
+    padding: 1.5rem;
     margin-bottom: 2rem;
-    box-shadow: 0 4px 15px rgba(0, 123, 255, 0.1);
-    text-align: left;
-    max-width: 100%;
-    transition: all 0.3s ease;
+    box-shadow: 0 3px 12px rgba(0, 123, 255, 0.05);
 }
 
-.selected-flights-box:hover {
-    box-shadow: 0 6px 20px rgba(0, 123, 255, 0.2);
-}
-
-
+/* 선택된 항공편 항목 */
 .selected-flight {
     background-color: #ffffff;
     border-left: 4px solid #2196f3;
     padding: 1rem;
-    margin: 0.75rem 0;
-    border-radius: 10px;
-    font-weight: 600;
-    color: #333;
+    border-radius: 8px;
+    font-weight: 500;
     display: flex;
     justify-content: space-between;
     align-items: center;
-    box-shadow: 0 2px 5px rgba(0,0,0,0.05);
-    transition: background-color 0.3s;
+    margin-bottom: 1rem;
 }
 
-.selected-flight:hover {
-    background-color: #f0f7ff;
-}
-
-.flight-card.selected {
-    background-color: #f0f8ff;
-    border: 2px solid #007bff;
-}
-
+/* 예약 버튼 */
 .booking-button {
     background-color: #007bff;
     color: white;
-    padding: 10px 20px;
+    padding: 12px 24px;
+    font-size: 1rem;
     border: none;
+    border-radius: 8px;
     cursor: pointer;
-    font-size: 16px;
-    margin-top: 20px;
+    margin-top: 1rem;
 }
 
 .booking-button:disabled {
-    background-color: #ddd;
+    background-color: #cccccc;
     cursor: not-allowed;
 }
 
+/* 검색 요청이 없을 때 메시지 */
 .no-search-message {
     text-align: center;
-    margin-top: 40px;
     font-size: 1.2rem;
     color: #777;
+    margin-top: 60px;
 }

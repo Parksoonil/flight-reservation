@@ -55,7 +55,7 @@ function MyPage() {
       await apiClient.put(`api/users/${updatedUser.id}`, updatedUser);
       setUser(updatedUser);
       alert("내정보가 성공적으로 업데이트되었습니다.");
-      setIsEditing(false);
+      // setIsEditing(false);
       window.location.reload();
     } catch (error) {
       alert("내정보 업데이트 중 문제가 발생했습니다." + error);
@@ -89,8 +89,8 @@ function MyPage() {
 
   const handleMenuChange = (menu) => {
     setSelectedMenu(menu);
-    setIsEditing(false);
-    setIsDeleting(false);
+    // setIsEditing(false);
+    // setIsDeleting(false);
   };
 
   const renderContent = () => {
